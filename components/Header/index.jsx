@@ -3,7 +3,7 @@ import React from 'react';
 
 const Header = () => {
   return (
-    <div className="flex flex-row w-full">
+    <div className="mr-auto w-full">
       <ConnectKitButton />
     </div>
   );

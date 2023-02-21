@@ -1,8 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import { Inter } from '@next/font/google';
-import styles from '@/styles/Home.module.css';
-
 import { WagmiConfig, createClient } from 'wagmi';
 import { ConnectKitProvider, ConnectKitButton, getDefaultClient } from 'connectkit';
 import Header from '@/components/Header';
@@ -10,6 +8,8 @@ import { mainnet, goerli } from 'wagmi/chains';
 import { poseidon } from 'circomlibjs';
 import { useContractReader } from 'eth-hooks';
 import { ethers } from 'ethers';
+import Main from '@/components/Main';
+
 const inter = Inter({ subsets: ['latin'] });
 
 const alchemyId = 'sEmqlfcdWUUs-dU7PuO5LuSt8dF6KhZ1';
@@ -36,10 +36,7 @@ export default function Home() {
       <WagmiConfig client={client}>
         <ConnectKitProvider>
           <Header />
-          <main className={styles.main}>
-            <div className={styles.center}></div>
-          </main>
-          <ConnectKitButton />
+          <Main />
         </ConnectKitProvider>
       </WagmiConfig>
     </>
