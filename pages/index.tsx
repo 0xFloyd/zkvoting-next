@@ -16,6 +16,17 @@ const alchemyId = 'sEmqlfcdWUUs-dU7PuO5LuSt8dF6KhZ1';
 
 // const alchemyId = process.env.ALCHEMY_ID;
 
+// Another alternative is to create an additional network at MetaMask, name it localhost, use the address http://127.0.0.1:8545, and chainId 31337
+
+// const ethProvider = new JsonRpcProvider(process.env.RPC_URL, getNetwork(process.env.CHAIN_ID);
+// const connector = new MetaMaskConnector({chains: [chain.hardhat]});
+
+// const client = createClient({
+//     autoConnect: true,
+//     provider: ethProvider,
+//     connectors: [connector],
+// });
+
 const client = createClient(
   getDefaultClient({
     appName: 'zk voting',
