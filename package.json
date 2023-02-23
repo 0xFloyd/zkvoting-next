@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cedoor/smt": "^0.1.7",
     "@next/font": "13.1.6",
+    "@rainbow-me/rainbowkit": "^0.11.0",
     "big-integer": "^1.6.51",
     "circomlibjs": "^0.0.8",
     "connectkit": "^1.1.3",
