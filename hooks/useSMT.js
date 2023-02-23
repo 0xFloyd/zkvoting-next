@@ -14,17 +14,21 @@ const initTree = zeroTree;
 export default function useSMT(leaves) {
   const [tree, setTree] = useState(initTree);
 
-  useEffect(async () => {
+  useEffect(() => {
     // const newTree = new SMT(hash, true);
-    const newTree = await smt.newMemEmptyTrie();
-    if (leaves) {
-      const leafKeys = Object.keys(leaves);
-      for (let i = 0; i < leafKeys.length; i++) {
-        // newTree.add(BigInt(leafKeys[i]), BigInt(leaves[leafKeys[i]]));
-        await newTree.insert(leafKeys[i], leaves[leafKeys[i]]);
+    const fetchData = async () => {
+      const newTree = await smt.newMemEmptyTrie();
+      if (leaves) {
+        const leafKeys = Object.keys(leaves);
+        for (let i = 0; i < leafKeys.length; i++) {
+          // newTree.add(BigInt(leafKeys[i]), BigInt(leaves[leafKeys[i]]));
+          await newTree.insert(leafKeys[i], leaves[leafKeys[i]]);
+        }
       }
-    }
-    setTree(newTree);
+      setTree(newTree);
+    };
+
+    fetchData();
   }, [leaves]);
 
   return tree;

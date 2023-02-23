@@ -1,8 +1,8 @@
 // deploy/00_deploy_your_contract.js
 
-const { ethers } = require("hardhat");
+const { ethers } = require('hardhat');
 
-const localChainId = "31337";
+const localChainId = '31337';
 
 const sleep = (ms) =>
   new Promise((r) =>
@@ -17,14 +17,14 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("ZKVoting", {
+  await deploy('ZKVoting', {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     log: true,
   });
 
   // Getting a previously deployed contract
-  const ZKVoting = await ethers.getContract("ZKVoting", deployer);
+  const ZKVoting = await ethers.getContract('ZKVoting', deployer);
 
   /*  await ZKVoting.setPurpose("Hello");
   
@@ -36,15 +36,15 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   */
 
   //If you want to send value to an address from the deployer
-  // const deployerWallet = ethers.provider.getSigner();
-  // await deployerWallet.sendTransaction({
-  //   to: "0x905cb00659B503af942421B75918Ceda47D2798f",
-  //   value: ethers.utils.parseEther("0.1"),
-  // });
-  // await deployerWallet.sendTransaction({
-  //   to: "0x16a60E8152B0453509E7714455CAD1dc103edAA9",
-  //   value: ethers.utils.parseEther("0.1"),
-  // });
+  const deployerWallet = ethers.provider.getSigner();
+  await deployerWallet.sendTransaction({
+    to: '0x905cb00659B503af942421B75918Ceda47D2798f',
+    value: ethers.utils.parseEther('0.1'),
+  });
+  await deployerWallet.sendTransaction({
+    to: '0x16a60E8152B0453509E7714455CAD1dc103edAA9',
+    value: ethers.utils.parseEther('0.1'),
+  });
 
   /*
   //If you want to send some ETH to a contract on deploy (make your constructor payable!)
@@ -66,11 +66,11 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   if (chainId !== localChainId) {
     // wait for etherscan to be ready to verify
     await sleep(15000);
-    await run("verify:verify", {
+    await run('verify:verify', {
       address: ZKVoting.address,
-      contract: "contracts/ZKVoting.sol:ZKVoting",
+      contract: 'contracts/ZKVoting.sol:ZKVoting',
       contractArguments: [],
     });
   }
 };
-module.exports.tags = ["ZKVoting"];
+module.exports.tags = ['ZKVoting'];
