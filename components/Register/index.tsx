@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount, useContractRead } from 'wagmi';
+import { useAccount, useContractRead, useContractEvent } from 'wagmi';
 import { poseidon } from 'circomlibjs';
 import contract from '../../contracts/contractconfig';
 import { parseSolidityCalldata } from '@/utils/utils';
 import { prepareWriteContract, writeContract } from '@wagmi/core';
 import Loading from '../Loading';
 
-const Register = ({ nLevels, secrets, setSecrets, setPoseidonHash, calcedSMT, poseidonHash }) => {
+const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedSMT, poseidonHash }) => {
   const [addLeafTxLoading, setAddLeafTxLoading] = useState(false);
   const [addLeafCalldata, setAddLeafCalldata] = useState();
 
   const { address } = useAccount();
 
-  const { data: root }: any = useContractRead({
+  useContractEvent({
     ...contract,
-    functionName: 'root',
+    eventName: 'AddLeaf',
+    listener(node, resolver) {
+      console.log('AddLeaf event: ', node, resolver);
+    },
   });
+
   const { data: voteNonceData }: any = useContractRead({
     ...contract,
     functionName: 'voteNonce',
@@ -61,10 +65,12 @@ const Register = ({ nLevels, secrets, setSecrets, setPoseidonHash, calcedSMT, po
         (key, value) => (typeof value === 'bigint' ? value.toString() : value) // return everything else unchanged
       );
 
-      const response = await fetch('/api/fullprove', {
+      const response = await fetch('/api/addvoter', {
         method: 'POST',
         body: stringify,
       });
+
+      // TODO only if successful 200 response
       const leafData = await response.json();
 
       setAddLeafCalldata(JSON.parse(leafData));
@@ -79,9 +85,9 @@ const Register = ({ nLevels, secrets, setSecrets, setPoseidonHash, calcedSMT, po
         args: JSON.parse(leafData),
       });
 
-      const data = await writeContract(config);
+      const tx = await writeContract(config);
 
-      console.log('data write result: ', data);
+      console.log('data write result: ', tx);
 
       setAddLeafTxLoading(false);
       setSecrets([0, 0]);

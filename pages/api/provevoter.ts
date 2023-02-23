@@ -20,38 +20,30 @@ const BIGINTKETS = {
   newKey: true,
 };
 
-export default async function fullprove(req: NextApiRequest, res: NextApiResponse) {
+export default async function provevoter(req: NextApiRequest, res: NextApiResponse) {
   // console.log('req: ', req);
   try {
     let hmm = req.body;
     let parsed = JSON.parse(req.body);
-    // console.log('parsed: ', parsed);
+    console.log('provevoter parsed: ', parsed);
 
     let transform = {
-      oldRoot: BigInt(parsed.oldRoot),
-      newKey: BigInt(parsed.newKey),
-      newValue: parsed.newValue,
-      oldKey: BigInt(parsed.oldKey),
-      oldValue: BigInt(parsed.oldValue),
+      root: BigInt(parsed.root),
+      voteId: BigInt(parsed.voteId),
+      key: parsed.key,
+      secret: BigInt(parsed.secret),
+      nullifier: parsed.nullifier,
       siblings: parsed.siblings,
     };
-    // let addLeafInputs = {
-    //   oldRoot: BigInt(root.toString()),
-    //   newKey: BigInt(memberId.toString()),
-    //   newValue: poseidonHash,s
-    //   oldValue: '0',
-    //   siblings: new Array(nLevels).fill('0'),
-    // };
-    // const res = await calcedSMT.insert(BigInt(memberId.toString()), poseidonHash);
-    // addLeafInputs.oldKey = res.oldKey;
-    // addLeafInputs.oldValue = res.oldValue;
-    // for (let i = 0; i < addLeafInputs.siblings.length; i++) {
-    //   if (res.siblings[i]) {
-    //     addLeafInputs.siblings[i] = res.siblings[i];
-    //   }
-    // }
-    const { proof, publicSignals } = await snarkjs.groth16.fullProve(transform, add2TreeWasm, add2TreeZkey);
+
+    const { proof, publicSignals } = await snarkjs.groth16.fullProve(transform, proveInTreeWasm, proveInTreeZkey);
     const calldata = parseSolidityCalldata(proof, publicSignals);
+
+    const vkey = await snarkjs.zKey.exportVerificationKey(proveInTreeZkey);
+    const verified = await snarkjs.groth16.verify(vkey, publicSignals, proof);
+
+    console.log('verified: ', verified);
+    console.log('calldata: ', calldata);
 
     res.status(200).json(JSON.stringify(calldata));
   } catch (e) {
