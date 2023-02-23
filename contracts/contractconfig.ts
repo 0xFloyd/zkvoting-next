@@ -1,4 +1,5 @@
 import contracts from './hardhat_contracts.json';
+import { readContract, writeContract, prepareWriteContract } from '@wagmi/core';
 
 const hardhatContract = contracts[31337]?.localhost?.contracts?.ZKVoting;
 const goerliContract = contracts[5]?.goerli?.contracts?.ZKVoting;
@@ -13,6 +14,15 @@ const currentContract = process.env.NEXT_PUBLIC_NETWORK === 'localhost' ? hardha
 const contract: ContractType = {
   address: currentContract.address as `0x${string}`,
   abi: currentContract.abi,
+};
+
+export const readContractFunction = async (functionName, args) => {
+  const r = await readContract({
+    ...contract,
+    functionName,
+    args: [args],
+  });
+  return r;
 };
 
 export default contract;
