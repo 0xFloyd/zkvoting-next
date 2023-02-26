@@ -1,0 +1,5 @@
+export enum TOAST_TYPES {
+  SUCCESS = 'SUCCESS',
+  LOADING = 'LOADING',
+  ERROR = 'ERROR',
+}

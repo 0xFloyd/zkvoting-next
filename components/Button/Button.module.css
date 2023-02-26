@@ -1,0 +1,15 @@
+.shiny {
+  text-decoration: none;
+
+  /* border: 1px solid var(--primary); */
+
+  text-transform: uppercase;
+  transition: all 0.1s ease;
+}
+
+.shiny:hover {
+  /* border: 1px solid var(--primary); */
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 3px 15px var(--primary);
+}

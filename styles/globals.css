@@ -5,6 +5,8 @@
 :root {
   --primary: rgb(255, 0, 153);
   --secondary: rgb(71, 191, 242);
+  --tertiary: #050821;
+  --toastify-toast-background: #050821;
 }
 
 * {
@@ -23,6 +25,10 @@
   font-family: 'LaserCorps';
   src: url('../styles/LaserCorpsHalftone.otf');
 }
+@font-face {
+  font-family: 'LaserCorpsLaser';
+  src: url('../styles/LaserCorpsLaser.otf');
+}
 
 @font-face {
   font-family: 'Power';
@@ -30,6 +36,10 @@
 }
 
 p::selection {
+  background: var(--primary);
+}
+
+span::selection {
   background: var(--primary);
 }
 
@@ -191,8 +201,7 @@ input::-webkit-inner-spin-button {
 .background-80s {
   background: linear-gradient(to bottom, #010310 0, #0c1142 60%, #45125e 70%, #d53567 85%, #f0c3d9 100%) fixed;
   background-size: 100% var(--background-height, 100vh);
-  overflow: hidden;
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   width: 100vw;

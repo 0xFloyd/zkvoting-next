@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { Inter } from '@next/font/google';
 import { WagmiConfig, createClient, configureChains } from 'wagmi';
-import { ConnectKitProvider, ConnectKitButton, getDefaultClient } from 'connectkit';
 import Header from '@/components/Header';
 import { mainnet, goerli } from 'wagmi/chains';
 import { poseidon } from 'circomlibjs';
@@ -14,11 +13,14 @@ import { hardhat } from 'wagmi/chains';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { publicProvider } from 'wagmi/providers/public';
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { getDefaultWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import Loading from '@/components/Loading';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { ConnectKitProvider, ConnectKitButton, getDefaultClient } from 'connectkit';
+import { ToastContainer, Zoom } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -87,11 +89,19 @@ const { connectors } = getDefaultWallets({
   chains,
 });
 
-export const client = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-});
+// export const client = createClient({
+//   autoConnect: true,
+//   connectors,
+//   provider,
+// });
+
+const familyClient = createClient(
+  getDefaultClient({
+    appName: 'Your App Name',
+    alchemyId,
+    chains,
+  })
+);
 
 // goerli
 // const client = createClient(
@@ -111,12 +121,34 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <WagmiConfig client={client}>
-        <RainbowKitProvider chains={chains}>
-          <Header />
-          <ConnectButton />
-          <Main />
-        </RainbowKitProvider>
+      <WagmiConfig client={familyClient}>
+        {/* <RainbowKitProvider chains={chains} modalSize="compact"> */}
+        <ConnectKitProvider
+          customTheme={{
+            '--ck-connectbutton-background': 'var(--primary)',
+            '--ck-connectbutton-hover-background': 'var(--primary)',
+            '--ck-connectbutton-active-background': 'var(--primary)',
+            '--ck-font-family': 'Power',
+          }}
+        >
+          <div className="h-screen overflow-x-hidden background-80s stars">
+            <div className="overlay" />
+            <Header />
+            <Main />
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              rtl={false}
+              theme="dark"
+              limit={3}
+              transition={Zoom}
+            />
+          </div>
+
+          {/* </RainbowKitProvider> */}
+        </ConnectKitProvider>
       </WagmiConfig>
     </>
   );

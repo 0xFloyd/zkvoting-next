@@ -1,7 +1,12 @@
 import contract, { readContractFunction } from '@/contracts/contractconfig';
 import React, { useState, useEffect } from 'react';
 import { useAccount, useContractRead, useContractEvent } from 'wagmi';
-import { readContract, writeContract, prepareWriteContract } from '@wagmi/core';
+import { waitForTransaction, writeContract, prepareWriteContract } from '@wagmi/core';
+import VoteCard from '../VoteCard';
+import Input from '../Input';
+import Button from '../Button';
+import { toast } from 'react-toastify';
+import Etherscan from '../Etherscan';
 
 const Vote = ({ root, nLevels, calcedSMT }) => {
   const [voteCampaigns, setVoteCampaigns] = useState([]);
@@ -68,7 +73,12 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
         args: [...JSON.parse(data), vote],
       });
 
-      const tx = await writeContract(config);
+      const { hash, wait } = await writeContract(config);
+      toast.promise(wait, {
+        pending: <Etherscan hash={hash} />,
+        success: 'Tx confirmed!',
+      });
+      const txResult = await waitForTransaction({ hash });
 
       // get new vote counts
       const positive = await readContractFunction('positiveVoteResult', activeVoteId);
@@ -83,6 +93,7 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
 
       setProveMembershipLoading(false);
     } catch (e) {
+      // toast.error('TX error: ', JSON.stringify(e));
       console.log('error voting: ', e);
       setProveMembershipLoading(false);
       setMemberKey('');
@@ -144,142 +155,151 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
   let campaign = voteCampaigns?.find((campaign) => campaign.id == activeVoteId);
 
   return (
-    <div className="votingCard flex flex-col items-center">
-      {activeVoteId ? (
-        <div>
-          <p>{`${campaign ? campaign?.name : ''} Campaign`}</p>
-          <div className="grid grid-cols-2">
-            <p>{positiveCount}</p>
-            <p>{negativeCount}</p>
-          </div>
+    <VoteCard title={'Vote'}>
+      <div className="flex flex-col items-center h-full">
+        {activeVoteId ? (
           <div>
-            <input
-              className="input input-bordered input-primary w-full max-w-xs"
-              placeholder="enter member ID # "
-              value={memberKey}
-              onChange={(n) => setMemberKey(n.target.value)}
-            />
-            <input
-              className="input input-bordered input-primary w-full max-w-xs"
-              placeholder="enter secret"
-              value={memberSecret}
-              onChange={(n) => setMemberSecret(n.target.value)}
-            />
-          </div>
-
-          <div className="flex flex-row items-center gap-12 place-content-center">
-            <div className="">
-              <input
-                onChange={() => setVote(true)}
-                checked={vote === true}
-                style={{ width: '1rem', height: '1rem' }}
-                type="checkbox"
-                name="yes"
-              />
-              <label
-                htmlFor="yes"
-                style={{
-                  marginLeft: '0.5rem',
-                  padding: 'auto',
-                  verticalAlign: 'center',
-                  fontSize: '1.25rem',
-                  marginBottom: '0px',
-                }}
-              >
-                YES
-              </label>
+            <p>{`${campaign ? campaign?.name : ''} Campaign`}</p>
+            <div className="grid grid-cols-2">
+              <p>{positiveCount}</p>
+              <p>{negativeCount}</p>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center' }}>
-              <input
-                checked={vote === false}
-                style={{ width: '1rem', height: '1rem' }}
-                type="checkbox"
-                name="no"
-                onChange={() => setVote(false)}
-              />
-              <label
-                htmlFor="no"
-                style={{
-                  marginLeft: '0.5rem',
-                  padding: 'auto',
-                  verticalAlign: 'center',
-                  fontSize: '1.25rem',
-                  marginBottom: '0px',
-                }}
-              >
-                NO
-              </label>
-            </div>
-          </div>
-          <p style={{ fontStyle: 'italic', fontSize: '0.75rem', lineHeight: '1rem' }}>
-            Each Member ID will only be able to vote once per campaign. A cast vote cannot be changed.
-          </p>
-          <div className="flex flex-row gap-5">
-            <button
-              className="btn"
-              onClick={() => {
-                setActiveVoteId('');
-                setMemberKey('');
-                setMemberSecret('');
-                setVote(null);
-              }}
-            >
-              BACK
-            </button>
-            <button
-              className={`btn glass ${proveMembershipLoading && 'loading'}`}
-              disabled={vote === null || proveMembershipLoading}
-              onClick={() => {
-                genProveMemberTx();
-              }}
-            >
-              VOTE
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div>
-          {voteCampaigns?.length > 0 && (
             <div>
-              <p>Select a campaign to cast a vote</p>
-              <select
-                value={activeVoteId}
-                onChange={(e) => {
-                  console.log('new active vote id: ', e.target.value);
-                  setActiveVoteId(e.target.value);
-                }}
-                className="select select-bordered w-full max-w-xs"
-              >
-                <option value={''} disabled>
-                  select campaign
-                </option>
-                {voteCampaigns.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.name}
-                  </option>
-                ))}
-              </select>
+              <Input
+                label={'VOTER ID'}
+                type={'string'}
+                placeholder={'enter voter ID #'}
+                value={memberKey}
+                onChange={(n) => setMemberKey(n.target.value)} // className="input input-bordered input-primary w-full max-w-xs"
+              />
+              <Input
+                label={'SECRET'}
+                type={'string'}
+                placeholder={'enter secret'}
+                value={memberSecret}
+                onChange={(n) => setMemberSecret(n.target.value)} // className="input input-bordered input-primary w-full max-w-xs"
+              />
             </div>
-          )}
-          <div>
-            <p>Create a new campaign</p>
-            <input
-              className="input input-primary w-full max-w-xs"
-              placeholder="name of campaign to create"
-              value={campaignInput}
-              onChange={(n) => setCampaignInput(n.target.value)}
-            />
-            <button
-              className={`btn glass ${createNewCampaignLoading && 'loading'}`}
-              disabled={!campaignInput || createNewCampaignLoading}
-              onClick={() => createNewVoteCampaign()}
-            >
-              Create New Campaign
-            </button>
+
+            <div className="flex flex-row items-center gap-12 place-content-center">
+              <div className="">
+                <input
+                  onChange={() => setVote(true)}
+                  checked={vote === true}
+                  style={{ width: '1rem', height: '1rem' }}
+                  type="checkbox"
+                  name="yes"
+                />
+                <label
+                  htmlFor="yes"
+                  style={{
+                    marginLeft: '0.5rem',
+                    padding: 'auto',
+                    verticalAlign: 'center',
+                    fontSize: '1.25rem',
+                    marginBottom: '0px',
+                  }}
+                >
+                  YES
+                </label>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center' }}>
+                <input
+                  checked={vote === false}
+                  style={{ width: '1rem', height: '1rem' }}
+                  type="checkbox"
+                  name="no"
+                  onChange={() => setVote(false)}
+                />
+                <label
+                  htmlFor="no"
+                  style={{
+                    marginLeft: '0.5rem',
+                    padding: 'auto',
+                    verticalAlign: 'center',
+                    fontSize: '1.25rem',
+                    marginBottom: '0px',
+                  }}
+                >
+                  NO
+                </label>
+              </div>
+            </div>
+            <p style={{ fontStyle: 'italic', fontSize: '0.75rem', lineHeight: '1rem' }}>
+              Each Member ID will only be able to vote once per campaign. A cast vote cannot be changed.
+            </p>
+            <div className="flex flex-row gap-5">
+              <button
+                className="btn"
+                onClick={() => {
+                  setActiveVoteId('');
+                  setMemberKey('');
+                  setMemberSecret('');
+                  setVote(null);
+                }}
+              >
+                BACK
+              </button>
+              <button
+                className={`btn glass ${proveMembershipLoading && 'loading'}`}
+                disabled={vote === null || proveMembershipLoading}
+                onClick={() => {
+                  genProveMemberTx();
+                }}
+              >
+                VOTE
+              </button>
+            </div>
           </div>
+        ) : (
+          <div className="px-8 py-4">
+            {voteCampaigns?.length > 0 ? (
+              <div>
+                <p>Select a campaign to cast a vote</p>
+                <select
+                  value={activeVoteId}
+                  onChange={(e) => {
+                    console.log('new active vote id: ', e.target.value);
+                    setActiveVoteId(e.target.value);
+                  }}
+                  className="select select-bordered w-full max-w-xs"
+                >
+                  <option value={''} disabled>
+                    select campaign
+                  </option>
+                  {voteCampaigns.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <p>No campaigns exist</p>
+            )}
+          </div>
+        )}
+
+        <div className="border-PINK border-t-4 w-full h-full my-auto  px-8 pt-4 pb-8 mx-auto text-center flex flex-col items-center">
+          <p>Create a new campaign</p>
+
+          <Input
+            label={'NAME'}
+            type={'string'}
+            placeholder={'name of campaign'}
+            value={campaignInput}
+            onChange={(n) => setCampaignInput(n.target.value)} // className="input input-bordered input-primary w-full max-w-xs"
+          />
+
+          <Button
+            text={'Create New Campaign'}
+            className={`mt-auto ${createNewCampaignLoading && 'loading'}`}
+            disabled={!campaignInput || createNewCampaignLoading}
+            onClick={() => createNewVoteCampaign()}
+          />
         </div>
-      )}
-    </div>
+      </div>
+    </VoteCard>
   );
 };
 

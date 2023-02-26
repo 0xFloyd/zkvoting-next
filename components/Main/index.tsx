@@ -44,28 +44,25 @@ const Main = () => {
   const title = ['Z', 'K', ` `, 'V', 'o', 'T', 'I', 'N', 'g'];
 
   return (
-    <div className="h-screen overflow-hidden background-80s stars">
-      <div className="overlay" />
-      <div>
-        <div className="text-center text-9xl italic double-layer ">
+    <div>
+      {/* <div className="text-center text-5xl xl:text-9xl italic double-layer ">
           {title.map((letter, i) => (
-            <span key={`${letter}${i}`} className="font-arcade glow" data-title={letter}>
+            <span key={`${letter}${i}`} className="font-LaserCorps glow" data-title={letter}>
               {letter}
             </span>
           ))}
-        </div>
-        <div className="grid grid-cols-2 gap-12 max-w-7xl mx-auto">
-          <Register
-            root={root}
-            nLevels={nLevels}
-            secrets={secrets}
-            setSecrets={setSecrets}
-            setPoseidonHash={setPoseidonHash}
-            calcedSMT={calcedSMT}
-            poseidonHash={poseidonHash}
-          />
-          <Vote root={root} nLevels={nLevels} calcedSMT={calcedSMT} />
-        </div>
+        </div> */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-7xl mx-auto p-4">
+        <Register
+          root={root}
+          nLevels={nLevels}
+          secrets={secrets}
+          setSecrets={setSecrets}
+          setPoseidonHash={setPoseidonHash}
+          calcedSMT={calcedSMT}
+          poseidonHash={poseidonHash}
+        />
+        <Vote root={root} nLevels={nLevels} calcedSMT={calcedSMT} />
       </div>
 
       {/* <div className="sun"></div> */}

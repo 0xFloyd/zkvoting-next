@@ -12,4 +12,8 @@ const parseSolidityCalldata = (prf, sgn) => {
   return calldata;
 };
 
-export { parseSolidityCalldata };
+const trimString = (string) => {
+  return string.substring(0, 150);
+};
+
+export { parseSolidityCalldata, trimString };
