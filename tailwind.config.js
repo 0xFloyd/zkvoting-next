@@ -9,10 +9,14 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        arcade: ['LaserCorps', 'sans-serif'],
+      },
+    },
   },
   plugins: [require('daisyui')],
-  daisyui: {
-    themes: ['coffee', 'luxury', 'cyberpunk'],
-  },
+  // daisyui: {
+  //   themes: ['coffee', 'luxury', 'cyberpunk'],
+  // },
 };

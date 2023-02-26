@@ -42,7 +42,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     value: ethers.utils.parseEther('0.1'),
   });
   await deployerWallet.sendTransaction({
-    to: '0x16a60E8152B0453509E7714455CAD1dc103edAA9',
+    to: '0x93e5DEca5911c3B981B52A75A24391e755f1b017',
     value: ethers.utils.parseEther('0.1'),
   });
 

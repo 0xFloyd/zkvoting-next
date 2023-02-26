@@ -16,11 +16,11 @@ const contract: ContractType = {
   abi: currentContract.abi,
 };
 
-export const readContractFunction = async (functionName, args) => {
+export const readContractFunction = async (functionName: string, args?: any) => {
   const r = await readContract({
     ...contract,
     functionName,
-    args: [args],
+    ...(args && { args: [args] }),
   });
   return r;
 };

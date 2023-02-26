@@ -17,6 +17,8 @@ import { publicProvider } from 'wagmi/providers/public';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
+import Loading from '@/components/Loading';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -75,7 +77,10 @@ const chainid = 31337;
 //   ],
 // });
 
-const { chains, provider } = configureChains([hardhat], [publicProvider()]);
+const { chains, provider } = configureChains(
+  [hardhat],
+  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }), publicProvider()]
+);
 
 const { connectors } = getDefaultWallets({
   appName: 'My RainbowKit App',

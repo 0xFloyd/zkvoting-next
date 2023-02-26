@@ -1,4 +1,4 @@
-import contract from '@/contracts/contractconfig';
+import contract, { readContractFunction } from '@/contracts/contractconfig';
 import React, { useState, useEffect } from 'react';
 import { useAccount, useContractRead, useContractEvent } from 'wagmi';
 import { readContract, writeContract, prepareWriteContract } from '@wagmi/core';
@@ -13,14 +13,16 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
 
   const [vote, setVote] = useState(null);
   const [proveMembershipLoading, setProveMembershipLoading] = useState(false);
+  const [createNewCampaignLoading, setCreateNewCampaignLoading] = useState(false);
   const [proveMemCalldata, setProveMemCalldata] = useState();
 
   const [memberKey, setMemberKey] = useState('');
   const [memberSecret, setMemberSecret] = useState('');
 
-  const { data: voteNonce }: any = useContractRead({
+  const { data: proposalCounter }: any = useContractRead({
     ...contract,
-    functionName: 'voteNonce',
+    functionName: 'proposalCounter',
+    watch: true,
   });
 
   const { address } = useAccount();
@@ -69,80 +71,66 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
       const tx = await writeContract(config);
 
       // get new vote counts
-      const positive = await readContract({
-        ...contract,
-        functionName: 'positiveVoteResult',
-        args: [activeVoteId],
-      });
-
-      const negative = await readContract({
-        ...contract,
-        functionName: 'negativeVoteResult',
-        args: [activeVoteId],
-      });
+      const positive = await readContractFunction('positiveVoteResult', activeVoteId);
+      const negative = await readContractFunction('negativeVoteResult', activeVoteId);
 
       setPositiveCount(positive ? Number(positive.toString()) : 0);
       setNegativeCount(negative ? Number(negative.toString()) : 0);
 
-      setMemberKey(undefined);
-      setMemberSecret(undefined);
+      setMemberKey('');
+      setMemberSecret('');
+      setVote(null);
 
       setProveMembershipLoading(false);
-      setVote(null);
     } catch (e) {
       console.log('error voting: ', e);
       setProveMembershipLoading(false);
+      setMemberKey('');
+      setMemberSecret('');
+      setVote(null);
     }
   };
 
   const createNewVoteCampaign = async () => {
+    setCreateNewCampaignLoading(true);
     try {
       const config = await prepareWriteContract({
         ...contract,
-        functionName: 'createVote',
+        functionName: 'createProposal',
         args: [Math.floor(Date.now() / 1000) + 10000, campaignInput],
       });
 
       const tx = await writeContract(config);
-      console.log('tx result: ', tx);
+      const r = await tx.wait();
       setCampaignInput('');
+      setCreateNewCampaignLoading(false);
     } catch (e) {
       console.log('e: ', e);
+      setCreateNewCampaignLoading(false);
     }
   };
 
   const fetchCampaigns = async () => {
     let campaigns = [];
-    for (let i = 0; i < voteNonce; i++) {
-      const campaignName = await readContract({
-        ...contract,
-        functionName: 'voteName',
-        args: [i],
-      });
+    const count = await readContractFunction('proposalCounter');
+    for (let i = 1; i < Number(count); i++) {
+      const campaignName = await readContractFunction('campaignName', i);
 
       campaigns.push({ id: i, name: campaignName });
     }
+
     setVoteCampaigns(campaigns);
   };
 
   useEffect(() => {
     fetchCampaigns();
-  }, [voteNonce]);
+  }, [proposalCounter]);
 
   useEffect(() => {
     const fetchVoteCounts = async () => {
       if (activeVoteId || activeVoteId === 0) {
-        const positive = await readContract({
-          ...contract,
-          functionName: 'positiveVoteResult',
-          args: [activeVoteId],
-        });
-
-        const negative = await readContract({
-          ...contract,
-          functionName: 'negativeVoteResult',
-          args: [activeVoteId],
-        });
+        const positive = await readContractFunction('positiveVoteResult', activeVoteId);
+        const negative = await readContractFunction('negativeVoteResult', activeVoteId);
 
         setPositiveCount(positive ? Number(positive.toString()) : 0);
         setNegativeCount(negative ? Number(negative.toString()) : 0);
@@ -153,26 +141,13 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
     fetchVoteCounts();
   }, [activeVoteId]);
 
-  useContractEvent({
-    ...contract,
-    eventName: 'CreateVote',
-    listener(node, resolver) {
-      fetchCampaigns();
-      console.log('CreateVote event: ', node, resolver);
-    },
-  });
-
-  console.log('voteCampaigns: ', voteCampaigns);
-  console.log('activeVoteId: ', activeVoteId);
-
-  let camp = activeVoteId && voteCampaigns.find((campaign) => campaign.id === activeVoteId);
-  console.log('camp: ', camp);
+  let campaign = voteCampaigns?.find((campaign) => campaign.id == activeVoteId);
 
   return (
     <div className="votingCard flex flex-col items-center">
       {activeVoteId ? (
         <div>
-          <p>{`${camp ? camp?.label : ''} Campaign`}</p>
+          <p>{`${campaign ? campaign?.name : ''} Campaign`}</p>
           <div className="grid grid-cols-2">
             <p>{positiveCount}</p>
             <p>{negativeCount}</p>
@@ -236,15 +211,31 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
               </label>
             </div>
           </div>
-          <button
-            className="btn btn-primary"
-            disabled={vote === null}
-            onClick={() => {
-              genProveMemberTx();
-            }}
-          >
-            Vote
-          </button>
+          <p style={{ fontStyle: 'italic', fontSize: '0.75rem', lineHeight: '1rem' }}>
+            Each Member ID will only be able to vote once per campaign. A cast vote cannot be changed.
+          </p>
+          <div className="flex flex-row gap-5">
+            <button
+              className="btn"
+              onClick={() => {
+                setActiveVoteId('');
+                setMemberKey('');
+                setMemberSecret('');
+                setVote(null);
+              }}
+            >
+              BACK
+            </button>
+            <button
+              className={`btn glass ${proveMembershipLoading && 'loading'}`}
+              disabled={vote === null || proveMembershipLoading}
+              onClick={() => {
+                genProveMemberTx();
+              }}
+            >
+              VOTE
+            </button>
+          </div>
         </div>
       ) : (
         <div>
@@ -262,9 +253,9 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
                 <option value={''} disabled>
                   select campaign
                 </option>
-                {formatCampaigns(voteCampaigns).map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+                {voteCampaigns.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
                   </option>
                 ))}
               </select>
@@ -278,7 +269,11 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
               value={campaignInput}
               onChange={(n) => setCampaignInput(n.target.value)}
             />
-            <button className="btn btn-primary" disabled={!campaignInput} onClick={() => createNewVoteCampaign()}>
+            <button
+              className={`btn glass ${createNewCampaignLoading && 'loading'}`}
+              disabled={!campaignInput || createNewCampaignLoading}
+              onClick={() => createNewVoteCampaign()}
+            >
               Create New Campaign
             </button>
           </div>

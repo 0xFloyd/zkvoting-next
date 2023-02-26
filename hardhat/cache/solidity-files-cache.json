@@ -175,8 +175,8 @@
       ]
     },
     "/Users/floyd/Documents/GitHub/TEMPORARY_PROJECTS_AND_LEARNING/zkvoting-next/hardhat/contracts/ZKVoting.sol": {
-      "lastModificationDate": 1677039742652,
-      "contentHash": "52d64ec95b0ee3b9a56426824c0a3e6d",
+      "lastModificationDate": 1677268230313,
+      "contentHash": "fe8dc9eb664a547493550824b850c4a9",
       "sourceName": "contracts/ZKVoting.sol",
       "solcConfig": {
         "version": "0.6.11",

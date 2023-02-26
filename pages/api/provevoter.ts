@@ -42,9 +42,6 @@ export default async function provevoter(req: NextApiRequest, res: NextApiRespon
     const vkey = await snarkjs.zKey.exportVerificationKey(proveInTreeZkey);
     const verified = await snarkjs.groth16.verify(vkey, publicSignals, proof);
 
-    console.log('verified: ', verified);
-    console.log('calldata: ', calldata);
-
     res.status(200).json(JSON.stringify(calldata));
   } catch (e) {
     res.status(500).json({ name: 'John Doe' });

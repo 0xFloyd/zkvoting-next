@@ -6,7 +6,6 @@ const Loading = ({ textInput = '' }) => {
       <div
         style={{
           display: 'flex',
-          marginLeft: '0.25rem',
           color: '#ffffff',
           justifyContent: 'center',
           alignItems: 'center',
@@ -26,10 +25,6 @@ const Loading = ({ textInput = '' }) => {
             fillRule="evenodd"
           />
         </svg>
-
-        <div style={{ fontSize: '1.25rem', lineHeight: '1.75rem' }} className="text-xl">
-          {textInput}
-        </div>
       </div>
     </div>
   );
