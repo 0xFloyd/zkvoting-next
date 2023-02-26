@@ -22,6 +22,7 @@ const BIGINTKETS = {
 
 export default async function addvoter(req: NextApiRequest, res: NextApiResponse) {
   // console.log('req: ', req);
+
   try {
     let hmm = req.body;
     let parsed = JSON.parse(req.body);
@@ -55,6 +56,6 @@ export default async function addvoter(req: NextApiRequest, res: NextApiResponse
 
     res.status(200).json(JSON.stringify(calldata));
   } catch (e) {
-    res.status(500).json({ name: 'John Doe' });
+    res.status(500).json(e?.message ? e?.message : e);
   }
 }

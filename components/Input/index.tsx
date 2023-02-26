@@ -1,6 +1,15 @@
 import React from 'react';
 
-const Input = ({ label, type, placeholder, value, onChange }) => {
+interface InputProps {
+  label: string;
+  type: string;
+  placeholder: string | number;
+  value: any;
+  onChange?: any;
+  disabled?: boolean;
+}
+
+const Input = ({ label, type, placeholder, value, onChange, disabled }: InputProps) => {
   const [focused, setFocused] = React.useState(false);
   const onFocus = () => setFocused(true);
   const onBlur = () => setFocused(false);
@@ -8,7 +17,7 @@ const Input = ({ label, type, placeholder, value, onChange }) => {
   return (
     <div className="mt-1 flex rounded-md">
       <span
-        className={`transition-all text-gray inline-flex items-center rounded-l-md border-2  border-r-0 px-3 sm:text-sm ${
+        className={`flex-shrink-0 transition-all text-gray inline-flex items-center rounded-l-md border-2  border-r-0 px-3 sm:text-sm ${
           focused ? 'border-PINK' : 'border-secondaryGray border-opacity-20'
         }`}
       >
@@ -18,6 +27,7 @@ const Input = ({ label, type, placeholder, value, onChange }) => {
         onFocus={onFocus}
         onBlur={onBlur}
         type={type}
+        disabled={disabled}
         placeholder={placeholder}
         className="input input-bordered bg-transparent placeholder:italic placeholder:opacity-25 w-full rounded-l-none focus:outline-none border-2 focus:border-PINK"
         value={value}

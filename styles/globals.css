@@ -117,6 +117,21 @@ input::-webkit-inner-spin-button {
   background-color: #050821;
 }
 
+.input[disabled] {
+  background-color: transparent;
+}
+.input-disabled {
+  background-color: transparent;
+}
+
+.select {
+  background-color: transparent;
+}
+
+.select:focus {
+  background-color: transparent;
+}
+
 /* .neonText {
   color: rgb(251, 251, 251);
   text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px #f09, 0 0 80px #f09, 0 0 90px #f09, 0 0 100px #f09,

@@ -7,6 +7,8 @@ import Input from '../Input';
 import Button from '../Button';
 import { toast } from 'react-toastify';
 import Etherscan from '../Etherscan';
+import { processErrors } from '@/utils/errors';
+import { trimString } from '@/utils/utils';
 
 const Vote = ({ root, nLevels, calcedSMT }) => {
   const [voteCampaigns, setVoteCampaigns] = useState([]);
@@ -111,12 +113,18 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
         args: [Math.floor(Date.now() / 1000) + 10000, campaignInput],
       });
 
-      const tx = await writeContract(config);
-      const r = await tx.wait();
+      const { hash } = await writeContract(config);
+      toast(<Etherscan hash={hash} />);
+      const data = await waitForTransaction({
+        hash,
+      });
+      toast('TX Confirmed');
       setCampaignInput('');
       setCreateNewCampaignLoading(false);
     } catch (e) {
-      console.log('e: ', e);
+      toast(`TX Error: ${trimString(e?.message ? processErrors(e.message) : e)}`);
+      console.log(e);
+      setCampaignInput('');
       setCreateNewCampaignLoading(false);
     }
   };
