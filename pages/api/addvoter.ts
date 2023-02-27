@@ -24,7 +24,6 @@ export default async function addvoter(req: NextApiRequest, res: NextApiResponse
   // console.log('req: ', req);
 
   try {
-    let hmm = req.body;
     let parsed = JSON.parse(req.body);
     // console.log('parsed: ', parsed);
 

@@ -156,7 +156,7 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
               onChange={(e) => handleUserInput(e.target.value, true)}
             />
 
-            <button className="btn glass btn-sm m-2 mb-4" onClick={() => generateSecrets()}>
+            <button className="btn glass btn-xs m-2 mb-4 text-xs" onClick={() => generateSecrets()}>
               Generate Random
             </button>
           </div>

@@ -1,26 +1,22 @@
 import contract, { readContractFunction } from '@/contracts/contractconfig';
 import React, { useState, useEffect } from 'react';
-import { useAccount, useContractRead, useContractEvent } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import { waitForTransaction, writeContract, prepareWriteContract } from '@wagmi/core';
 import VoteCard from '../VoteCard';
 import Input from '../Input';
-import Button from '../Button';
+
 import { toast } from 'react-toastify';
 import Etherscan from '../Etherscan';
-import { processErrors } from '@/utils/errors';
-import { trimString } from '@/utils/utils';
 
 const Vote = ({ root, nLevels, calcedSMT }) => {
   const [voteCampaigns, setVoteCampaigns] = useState([]);
   const [activeVoteId, setActiveVoteId] = useState<string | number>('');
-  const [campaignInput, setCampaignInput] = useState('');
 
   const [positiveCount, setPositiveCount] = useState(0);
   const [negativeCount, setNegativeCount] = useState(0);
 
   const [vote, setVote] = useState(null);
   const [proveMembershipLoading, setProveMembershipLoading] = useState(false);
-  const [createNewCampaignLoading, setCreateNewCampaignLoading] = useState(false);
   const [proveMemCalldata, setProveMemCalldata] = useState();
 
   const [memberKey, setMemberKey] = useState('');
@@ -104,31 +100,6 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
     }
   };
 
-  const createNewVoteCampaign = async () => {
-    setCreateNewCampaignLoading(true);
-    try {
-      const config = await prepareWriteContract({
-        ...contract,
-        functionName: 'createProposal',
-        args: [Math.floor(Date.now() / 1000) + 10000, campaignInput],
-      });
-
-      const { hash } = await writeContract(config);
-      toast(<Etherscan hash={hash} />);
-      const data = await waitForTransaction({
-        hash,
-      });
-      toast('TX Confirmed');
-      setCampaignInput('');
-      setCreateNewCampaignLoading(false);
-    } catch (e) {
-      toast(`TX Error: ${trimString(e?.message ? processErrors(e.message) : e)}`);
-      console.log(e);
-      setCampaignInput('');
-      setCreateNewCampaignLoading(false);
-    }
-  };
-
   const fetchCampaigns = async () => {
     let campaigns = [];
     const count = await readContractFunction('proposalCounter');
@@ -164,14 +135,21 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
 
   return (
     <VoteCard title={'Vote'}>
-      <div className="flex flex-col items-center h-full">
+      <div className="flex flex-col items-center h-full px-8 pt-4 pb-8">
         {activeVoteId ? (
-          <div>
-            <p>{`${campaign ? campaign?.name : ''} Campaign`}</p>
-            <div className="grid grid-cols-2">
-              <p>{positiveCount}</p>
-              <p>{negativeCount}</p>
+          <div className="m-auto">
+            <p className="capitalize text-center text-2xl mb-2">{`${campaign ? campaign?.name : ''} Campaign`}</p>
+            <div className="flex flex-row w-full place-content-center gap-6  mb-4">
+              <div className="glass rounded-md p-2 items-center text-center select-none">
+                <p className="text-xs">YES</p>
+                <span className="text-lg">{positiveCount}</span>
+              </div>
+              <div className="glass rounded-md p-2 flex flex-col items-center text-center select-none">
+                <p className="text-xs">NO</p>
+                <span className="text-lg">{negativeCount}</span>
+              </div>
             </div>
+
             <div>
               <Input
                 label={'VOTER ID'}
@@ -189,46 +167,28 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
               />
             </div>
 
-            <div className="flex flex-row items-center gap-12 place-content-center">
-              <div className="">
+            <div className="flex flex-row items-center gap-12 place-content-center my-6">
+              <div className="flex flex-row ">
                 <input
                   onChange={() => setVote(true)}
                   checked={vote === true}
-                  style={{ width: '1rem', height: '1rem' }}
                   type="checkbox"
                   name="yes"
+                  className="checkbox checkbox-sm border-opacity-40"
                 />
-                <label
-                  htmlFor="yes"
-                  style={{
-                    marginLeft: '0.5rem',
-                    padding: 'auto',
-                    verticalAlign: 'center',
-                    fontSize: '1.25rem',
-                    marginBottom: '0px',
-                  }}
-                >
+                <label className="text-lg ml-2 leading-snug" htmlFor="yes">
                   YES
                 </label>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center' }}>
+              <div className="flex flex-row">
                 <input
                   checked={vote === false}
-                  style={{ width: '1rem', height: '1rem' }}
+                  className="checkbox checkbox-sm  border-opacity-40"
                   type="checkbox"
                   name="no"
                   onChange={() => setVote(false)}
                 />
-                <label
-                  htmlFor="no"
-                  style={{
-                    marginLeft: '0.5rem',
-                    padding: 'auto',
-                    verticalAlign: 'center',
-                    fontSize: '1.25rem',
-                    marginBottom: '0px',
-                  }}
-                >
+                <label className="text-lg ml-2 leading-snug" htmlFor="no">
                   NO
                 </label>
               </div>
@@ -236,9 +196,9 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
             <p style={{ fontStyle: 'italic', fontSize: '0.75rem', lineHeight: '1rem' }}>
               Each Member ID will only be able to vote once per campaign. A cast vote cannot be changed.
             </p>
-            <div className="flex flex-row gap-5">
+            <div className="flex flex-row gap-5 place-content-center mt-2">
               <button
-                className="btn"
+                className="text-gray btn btn-outline"
                 onClick={() => {
                   setActiveVoteId('');
                   setMemberKey('');
@@ -260,14 +220,13 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
             </div>
           </div>
         ) : (
-          <div className="px-8 py-4">
+          <div className="m-auto">
             {voteCampaigns?.length > 0 ? (
               <div>
-                <p>Select a campaign to cast a vote</p>
+                <p className="mb-1 text-lg">Select a campaign to cast a vote</p>
                 <select
                   value={activeVoteId}
                   onChange={(e) => {
-                    console.log('new active vote id: ', e.target.value);
                     setActiveVoteId(e.target.value);
                   }}
                   className="select select-bordered w-full max-w-xs"
@@ -283,36 +242,13 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
                 </select>
               </div>
             ) : (
-              <p>No campaigns exist</p>
+              <p className="text-xl">No campaigns exist</p>
             )}
           </div>
         )}
-
-        <div className="border-PINK border-t-4 w-full h-full my-auto  px-8 pt-4 pb-8 mx-auto text-center flex flex-col items-center">
-          <p>Create a new campaign</p>
-
-          <Input
-            label={'NAME'}
-            type={'string'}
-            placeholder={'name of campaign'}
-            value={campaignInput}
-            onChange={(n) => setCampaignInput(n.target.value)} // className="input input-bordered input-primary w-full max-w-xs"
-          />
-
-          <Button
-            text={'Create New Campaign'}
-            className={`mt-auto ${createNewCampaignLoading && 'loading'}`}
-            disabled={!campaignInput || createNewCampaignLoading}
-            onClick={() => createNewVoteCampaign()}
-          />
-        </div>
       </div>
     </VoteCard>
   );
 };
 
 export default Vote;
-
-const formatCampaigns = (campaigns) => {
-  return campaigns.map((campaign) => ({ value: campaign.id, label: campaign.name }));
-};

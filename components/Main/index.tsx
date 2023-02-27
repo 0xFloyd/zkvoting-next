@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useAccount, useContractEvent, useContractRead } from 'wagmi';
+import React, { useState } from 'react';
+import { useContractEvent, useContractRead } from 'wagmi';
 import contract from '../../contracts/contractconfig';
 import useSMT from '../../hooks/useSMT';
-import { poseidon } from 'circomlibjs';
 import Register from '../Register';
 import Vote from '../Vote';
+import Modal from '../Modal';
+import Button from '../Button';
+import CreateCampaign from '../CreateCampaign';
 
 const nLevels = 3;
 
@@ -13,8 +15,6 @@ const Main = () => {
   const [poseidonHash, setPoseidonHash] = useState();
 
   const [leaves, setLeaves] = useState({});
-
-  const { address } = useAccount();
 
   const { data: root }: any = useContractRead({
     ...contract,
@@ -43,15 +43,23 @@ const Main = () => {
 
   const title = ['Z', 'K', ` `, 'V', 'o', 'T', 'I', 'N', 'g'];
 
+  const [open, setOpen] = useState(false);
+
   return (
     <div>
-      {/* <div className="text-center text-5xl xl:text-9xl italic double-layer ">
-          {title.map((letter, i) => (
-            <span key={`${letter}${i}`} className="font-LaserCorps glow" data-title={letter}>
-              {letter}
-            </span>
-          ))}
-        </div> */}
+      <div className="max-w-2xl mx-auto text-center mb-4 text-xl">
+        <p>Create campaigns for your cause</p>
+        <p className="mb-2">Use the power of zero knowledge proofs to allow for anonymous voting!</p>
+        <Button
+          text={'Create'}
+          className={'!bg-PINK text-white btn-sm'}
+          disabled={false}
+          onClick={() => setOpen(!open)}
+        />
+      </div>
+      <Modal open={open} setOpen={setOpen}>
+        <CreateCampaign />
+      </Modal>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-7xl mx-auto p-4">
         <Register
           root={root}
@@ -64,12 +72,6 @@ const Main = () => {
         />
         <Vote root={root} nLevels={nLevels} calcedSMT={calcedSMT} />
       </div>
-
-      {/* <div className="sun"></div> */}
-      {/* 
-      <div className="graph-container">
-        <div className="graph"></div>
-      </div> */}
     </div>
   );
 };

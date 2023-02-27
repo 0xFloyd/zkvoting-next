@@ -5,9 +5,11 @@ import React, { useEffect, useState } from 'react';
 import ConnectWallet from '../ConnectWallet';
 import { useContractRead } from 'wagmi';
 import contract from '@/contracts/contractconfig';
+import Button from '../Button';
 
 const Header = () => {
   const [voterCount, setVoterCount] = useState(0);
+  const [open, setOpen] = useState(false);
   const title = ['Z', 'K', ` `, 'V', 'o', 'T', 'I', 'N', 'g'];
   const { data: voters }: any = useContractRead({
     ...contract,
@@ -30,7 +32,15 @@ const Header = () => {
       </div>
       <div className="absolute top-2 right-2 flex flex-row items-center">
         {/* <ConnectWallet /> */}
-        <p className="mr-4 text-lg">{`${voterCount} Registered Voter${voterCount == 1 ? '' : 's'}`}</p>
+        <p className="text-white mr-4 text-md border-PINK border-2 rounded-xl px-3 py-1.5">{`${voterCount} Registered Voter${
+          voterCount == 1 ? '' : 's'
+        }`}</p>
+        {/* <Button
+          text={'Create Campaign'}
+          className={'bg-PINK text-white btn-sm !rounded-xl'}
+          disabled={false}
+          onClick={() => setOpen(!open)}
+        /> */}
         <ConnectKitButton />
       </div>
     </div>
