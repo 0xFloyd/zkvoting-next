@@ -12,12 +12,14 @@ import VoteCard from '../VoteCard';
 import { toast } from 'react-toastify';
 import Etherscan from '../Etherscan';
 import { processErrors } from '@/utils/errors';
+import { useModal } from 'connectkit';
 
 const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedSMT, poseidonHash }) => {
   const [addLeafTxLoading, setAddLeafTxLoading] = useState(false);
   const [addLeafCalldata, setAddLeafCalldata] = useState(0);
   const [voterCounter, setVoterCounter] = useState<number>(Number(BigInt(0)));
   const { address } = useAccount();
+  const { setOpen: setWalletOpen } = useModal();
 
   const { data: voterCount }: any = useContractRead({
     ...contract,
@@ -110,16 +112,21 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
   };
 
   const handleUserInput = (value, isSecret) => {
+    if (!address) {
+      setWalletOpen(true);
+      return;
+    }
     let newSecret = [BigInt(value), address];
     setSecrets(newSecret);
     setPoseidonHash(poseidon(newSecret));
   };
 
   function generateSecrets() {
-    const randArr = [
-      BigInt('0x' + crypto.randomBytes(8).toString('hex')),
-      BigInt('0x' + crypto.randomBytes(8).toString('hex')),
-    ];
+    if (!address) {
+      setWalletOpen(true);
+      return;
+    }
+    const randArr = [BigInt('0x' + crypto.randomBytes(8).toString('hex')), address];
     setAddLeafCalldata(0);
     setSecrets(randArr);
     setPoseidonHash(poseidon(randArr));
@@ -170,7 +177,7 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
               text={addLeafTxLoading ? 'REGISTERING...' : 'REGISTER'}
               className={`mt-auto ${addLeafTxLoading && 'loading'}`}
               disabled={!secrets[1] || !secrets[0]}
-              onClick={() => genAddLeafTx()}
+              onClick={() => (address ? genAddLeafTx() : setWalletOpen(true))}
             />
           </div>
         </div>

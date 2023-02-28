@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useContractEvent, useContractRead } from 'wagmi';
+import React, { useEffect, useState } from 'react';
+import { useAccount, useContractEvent, useContractRead } from 'wagmi';
 import contract from '../../contracts/contractconfig';
 import useSMT from '../../hooks/useSMT';
 import Register from '../Register';
@@ -7,6 +7,7 @@ import Vote from '../Vote';
 import Modal from '../Modal';
 import Button from '../Button';
 import CreateCampaign from '../CreateCampaign';
+import { useModal } from 'connectkit';
 
 const nLevels = 3;
 
@@ -45,16 +46,24 @@ const Main = () => {
 
   const [open, setOpen] = useState(false);
 
+  const [wallet, setWallet] = useState<string>('');
+  const { address } = useAccount();
+  const { setOpen: setWalletOpen } = useModal();
+
+  useEffect(() => {
+    setWallet(address);
+  }, [address]);
+
   return (
     <div className="relative">
       <div className="max-w-2xl mx-auto text-center mb-4 text-xl px-4">
         <p>Create campaigns for your cause</p>
         <p className="mb-2">Use the power of zero knowledge proofs to allow for anonymous voting!</p>
         <Button
-          text={'Create'}
+          text={wallet ? 'Create' : 'Connect'}
           className={'!bg-PINK text-white btn-sm'}
           disabled={false}
-          onClick={() => setOpen(!open)}
+          onClick={() => (address ? setOpen(!open) : setWalletOpen(true))}
         />
       </div>
       <Modal open={open} setOpen={setOpen}>

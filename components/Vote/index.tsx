@@ -10,6 +10,7 @@ import Button from '../Button';
 import { trimString } from '@/utils/utils';
 import { processErrors } from '@/utils/errors';
 import styles from './Vote.module.css';
+import { useModal } from 'connectkit';
 
 const Vote = ({ root, nLevels, calcedSMT }) => {
   const [voteCampaigns, setVoteCampaigns] = useState([
@@ -38,6 +39,7 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
   });
 
   const { address } = useAccount();
+  const { setOpen: setWalletOpen } = useModal();
 
   const genProveMemberTx = async () => {
     setProveMembershipLoading(true);
@@ -258,7 +260,7 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
                     className="my-3 rounded-lg border-secondaryGray border-opacity-20 border-2 flex flex-row place-content-between items-center px-4 py-3  w-full hover:bg-PINK hover:cursor-pointer hover:-translate-y-0.5  transition-all"
                     key={`${option.id}${i}`}
                     onClick={(e) => {
-                      setActiveVoteId(option.id);
+                      address ? setActiveVoteId(option.id) : setWalletOpen(true);
                     }}
                   >
                     <p className="text-md capitalize">{option?.name}</p>
