@@ -8,7 +8,7 @@ import Button from '../Button';
 import Etherscan from '../Etherscan';
 import Input from '../Input';
 
-const CreateCampaign = () => {
+const CreateCampaign = ({ setOpen }) => {
   const [campaignInput, setCampaignInput] = useState('');
   const [createNewCampaignLoading, setCreateNewCampaignLoading] = useState(false);
 
@@ -29,6 +29,7 @@ const CreateCampaign = () => {
       toast('TX Confirmed');
       setCampaignInput('');
       setCreateNewCampaignLoading(false);
+      setOpen(false);
     } catch (e) {
       toast(`TX Error: ${trimString(e?.message ? processErrors(e.message) : e)}`);
       console.log(e);

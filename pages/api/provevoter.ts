@@ -21,11 +21,8 @@ const BIGINTKETS = {
 };
 
 export default async function provevoter(req: NextApiRequest, res: NextApiResponse) {
-  // console.log('req: ', req);
   try {
-    let hmm = req.body;
     let parsed = JSON.parse(req.body);
-    console.log('provevoter parsed: ', parsed);
 
     let transform = {
       root: BigInt(parsed.root),
@@ -41,9 +38,12 @@ export default async function provevoter(req: NextApiRequest, res: NextApiRespon
 
     const vkey = await snarkjs.zKey.exportVerificationKey(proveInTreeZkey);
     const verified = await snarkjs.groth16.verify(vkey, publicSignals, proof);
-
-    res.status(200).json(JSON.stringify(calldata));
+    if (verified === true) {
+      res.status(200).json(JSON.stringify(calldata));
+    } else {
+      res.status(400).json('Invalid Proof');
+    }
   } catch (e) {
-    res.status(500).json({ name: 'John Doe' });
+    res.status(500).json('Internal Server Error');
   }
 }

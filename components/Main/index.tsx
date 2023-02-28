@@ -42,12 +42,9 @@ const Main = () => {
 
   const calcedSMT = useSMT(leaves);
 
-  const title = ['Z', 'K', ` `, 'V', 'o', 'T', 'I', 'N', 'g'];
-
   const [open, setOpen] = useState(false);
 
   const [wallet, setWallet] = useState<string>('');
-  const [viewContract, setViewContract] = useState('');
   const { address } = useAccount();
   const { setOpen: setWalletOpen } = useModal();
 
@@ -68,7 +65,7 @@ const Main = () => {
         />
       </div>
       <Modal open={open} setOpen={setOpen}>
-        <CreateCampaign />
+        <CreateCampaign setOpen={setOpen} />
       </Modal>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto p-4">
         <Register

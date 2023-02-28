@@ -7,7 +7,7 @@ import Input from '../Input';
 import { toast } from 'react-toastify';
 import Etherscan from '../Etherscan';
 import Button from '../Button';
-import { trimString } from '@/utils/utils';
+import { convertDate, trimString } from '@/utils/utils';
 import { processErrors } from '@/utils/errors';
 import styles from './Vote.module.css';
 import { useModal } from 'connectkit';
@@ -70,7 +70,6 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
         .json()
         .then(async (res) => {
           if (response.status === 200) {
-            console.log('provevoter response json: ', JSON.parse(res));
             setProveMemCalldata(JSON.parse(res));
 
             const config = await prepareWriteContract({
@@ -126,11 +125,11 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
       const timestamp = await readContractFunction('voteDeadline', i);
 
       const deadline = convertDate(timestamp);
-      console.log('deadline: ', deadline);
+
       campaigns.push({ id: i, name, deadline });
     }
 
-    setVoteCampaigns((prevState) => [...prevState, ...campaigns]);
+    setVoteCampaigns(campaigns);
   };
 
   useEffect(() => {
@@ -158,7 +157,7 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
     <VoteCard title={'Vote'}>
       <div className="flex flex-col items-center h-full">
         {activeVoteId ? (
-          <div className="m-auto">
+          <div className="p-4 m-auto">
             <p className="capitalize text-center text-2xl mb-2">{`${campaign ? campaign?.name : ''} Campaign`}</p>
             <div className="flex flex-row w-full place-content-center gap-6  mb-4">
               <div className="glass rounded-md p-2 items-center text-center select-none">
@@ -188,7 +187,7 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
               />
             </div>
 
-            <div className="flex flex-row items-center gap-12 place-content-center my-6">
+            <div className="flex flex-row items-center gap-12 place-content-center mt-4 mb-3">
               <div className="flex flex-row ">
                 <input
                   onChange={() => setVote(true)}
@@ -214,7 +213,7 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
                 </label>
               </div>
             </div>
-            <p style={{ fontStyle: 'italic', fontSize: '0.75rem', lineHeight: '1rem' }}>
+            <p className="text-xs italic">
               Each Member ID will only be able to vote once per campaign. A cast vote cannot be changed.
             </p>
             <div className="flex flex-row gap-5 place-content-center mt-2">
@@ -274,15 +273,3 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
 };
 
 export default Vote;
-
-const convertDate = (timestamp) => {
-  const date = new Date(timestamp * 1000);
-  const year = date.getFullYear().toString().slice(-2);
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const dateString = `${date.getMonth() + 1}/${date.getDate()}/${year} ${formattedHours}:${formattedMinutes} ${ampm}`;
-  return dateString;
-};
