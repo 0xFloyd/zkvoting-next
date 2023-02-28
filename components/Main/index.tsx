@@ -54,6 +54,10 @@ const Main = () => {
     setWallet(address);
   }, [address]);
 
+  useEffect(() => {
+    console.log('New Contract: ', contract);
+  }, [contract]);
+
   return (
     <div className="relative">
       <div className="max-w-2xl mx-auto text-center mb-4 text-xl px-4">
