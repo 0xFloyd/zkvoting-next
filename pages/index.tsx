@@ -3,13 +3,12 @@ import Image from 'next/image';
 import { Inter } from '@next/font/google';
 import { WagmiConfig, createClient, configureChains } from 'wagmi';
 import Header from '@/components/Header';
-import { mainnet, goerli } from 'wagmi/chains';
+import { mainnet, goerli, hardhat } from 'wagmi/chains';
 import { poseidon } from 'circomlibjs';
 import { useContractReader } from 'eth-hooks';
 import { ethers } from 'ethers';
 import Main from '@/components/Main';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { hardhat } from 'wagmi/chains';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { publicProvider } from 'wagmi/providers/public';
@@ -81,8 +80,12 @@ const chainid = 31337;
 //   ],
 // });
 
+const CHAIN = process.env.NEXT_PUBLIC_NETWORK === 'localhost' ? hardhat : goerli;
+
+console.log('process.env.NEXT_PUBLIC_NETWORK: ', process.env.NEXT_PUBLIC_NETWORK);
+
 const { chains, provider } = configureChains(
-  [hardhat],
+  [CHAIN],
   [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }), publicProvider()]
 );
 
