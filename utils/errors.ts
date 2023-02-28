@@ -4,11 +4,15 @@ const KEY_EXISTS = { error: 'Key already exists', result: 'Wallet already regist
 
 const processErrors = (error) => {
   const errorReasonRegex = /reverted with reason string '(.+?)'/;
+  const errorTwoReasonRegex = /execution reverted: (.+?),/;
   const match = errorReasonRegex.exec(error);
-
+  const matchTwo = errorTwoReasonRegex.exec(error);
+  console.log('matchTwo: ', matchTwo);
   let e = error;
   if (match && match[0]) {
     e = match[0];
+  } else if (matchTwo && matchTwo[0]) {
+    e = matchTwo[0];
   }
 
   switch (e) {
