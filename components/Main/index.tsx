@@ -26,8 +26,10 @@ const Main = () => {
   useContractEvent({
     ...contract,
     eventName: 'AddLeaf',
-    async listener(node, resolver) {
-      console.log('add leaf event: ', node);
+    async listener(key: any, value: any) {
+      let temp = leaves;
+      temp[key] = value?.toString();
+      setLeaves(temp);
     },
   });
 
@@ -35,7 +37,7 @@ const Main = () => {
   //   let lfv = {};
   //   for (let i = addLeafEvents.length - 1; i >= 0; i--) {
   //     lfv[addLeafEvents[i].args.key] = addLeafEvents[i].args.value.toString();
-  //     // lfv.push(addLeafEvents[i].args.value);
+  //
   //   }
   //   setLeaves(lfv);
   // }, [addLeafEvents]);
