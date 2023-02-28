@@ -95,12 +95,14 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
             throw new Error(JSON.stringify(res));
           }
         })
-        .catch((e) => {
+        .catch(async (e) => {
           toast(`TX Error: ${trimString(e?.message ? processErrors(e.message) : e)}`);
           console.log(e);
           setAddLeafTxLoading(false);
           setSecrets([0, 0]);
           setPoseidonHash(undefined);
+          // delete the leaf node, as transaction failed
+          const res = await calcedSMT.delete(BigInt(voterCounter.toString()));
         });
     } catch (e) {
       toast(`TX Error: ${trimString(e?.message ? processErrors(e.message) : e)}`);
@@ -108,6 +110,8 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
       setAddLeafTxLoading(false);
       setSecrets([0, 0]);
       setPoseidonHash(undefined);
+      // delete the leaf node, as transaction failed
+      const res = await calcedSMT.delete(BigInt(voterCounter.toString()));
     }
   };
 
