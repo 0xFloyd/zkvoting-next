@@ -13,13 +13,7 @@ import styles from './Vote.module.css';
 import { useModal } from 'connectkit';
 
 const Vote = ({ root, nLevels, calcedSMT }) => {
-  const [voteCampaigns, setVoteCampaigns] = useState([
-    { id: 5, name: 'one' },
-    { id: 6, name: 'two' },
-    { id: 7, name: 'three' },
-    { id: 8, name: 'four' },
-    { id: 9, name: 'five' },
-  ]);
+  const [voteCampaigns, setVoteCampaigns] = useState([]);
   const [activeVoteId, setActiveVoteId] = useState<string | number>('');
 
   const [positiveCount, setPositiveCount] = useState(0);
