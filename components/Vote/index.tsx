@@ -7,6 +7,9 @@ import Input from '../Input';
 
 import { toast } from 'react-toastify';
 import Etherscan from '../Etherscan';
+import Button from '../Button';
+import { trimString } from '@/utils/utils';
+import { processErrors } from '@/utils/errors';
 
 const Vote = ({ root, nLevels, calcedSMT }) => {
   const [voteCampaigns, setVoteCampaigns] = useState([]);
@@ -61,38 +64,51 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
       });
 
       // TODO only if successful 200 response
-      const data = await response.json();
-      console.log('provevoter response json: ', JSON.parse(data));
-      setProveMemCalldata(JSON.parse(data));
+      const data = await response
+        .json()
+        .then(async (res) => {
+          if (response.status === 200) {
+            console.log('provevoter response json: ', JSON.parse(res));
+            setProveMemCalldata(JSON.parse(res));
 
-      const config = await prepareWriteContract({
-        ...contract,
-        functionName: 'proveMembership',
-        args: [...JSON.parse(data), vote],
-      });
+            const config = await prepareWriteContract({
+              ...contract,
+              functionName: 'proveMembership',
+              args: [...JSON.parse(res), vote],
+            });
 
-      const { hash, wait } = await writeContract(config);
-      toast.promise(wait, {
-        pending: <Etherscan hash={hash} />,
-        success: 'Tx confirmed!',
-      });
-      const txResult = await waitForTransaction({ hash });
+            const { hash, wait } = await writeContract(config);
+            toast(<Etherscan hash={hash} />);
+            const txResult = await waitForTransaction({ hash });
+            toast('TX Confirmed');
+            // get new vote counts
+            const positive = await readContractFunction('positiveVoteResult', activeVoteId);
+            const negative = await readContractFunction('negativeVoteResult', activeVoteId);
 
-      // get new vote counts
-      const positive = await readContractFunction('positiveVoteResult', activeVoteId);
-      const negative = await readContractFunction('negativeVoteResult', activeVoteId);
+            setPositiveCount(positive ? Number(positive.toString()) : 0);
+            setNegativeCount(negative ? Number(negative.toString()) : 0);
 
-      setPositiveCount(positive ? Number(positive.toString()) : 0);
-      setNegativeCount(negative ? Number(negative.toString()) : 0);
+            setMemberKey('');
+            setMemberSecret('');
+            setVote(null);
 
-      setMemberKey('');
-      setMemberSecret('');
-      setVote(null);
+            setProveMembershipLoading(false);
+          } else {
+            throw new Error(JSON.stringify(res));
+          }
+        })
+        .catch((e) => {
+          toast(`TX Error: ${trimString(e?.message ? processErrors(e.message) : e)}`);
+          console.log('error voting: ', e?.message ? e.message : e);
+          setMemberKey('');
+          setMemberSecret('');
+          setVote(null);
 
-      setProveMembershipLoading(false);
+          setProveMembershipLoading(false);
+        });
     } catch (e) {
-      // toast.error('TX error: ', JSON.stringify(e));
-      console.log('error voting: ', e);
+      toast(`TX Error: ${trimString(e?.message ? processErrors(e.message) : e)}`);
+      console.log('error voting: ', e?.message ? e.message : e);
       setProveMembershipLoading(false);
       setMemberKey('');
       setMemberSecret('');
@@ -208,15 +224,14 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
               >
                 BACK
               </button>
-              <button
-                className={`btn glass ${proveMembershipLoading && 'loading'}`}
-                disabled={vote === null || proveMembershipLoading}
+              <Button
+                text={'VOTE'}
+                className={`${proveMembershipLoading && 'loading'}`}
+                disabled={vote === null || !memberKey || !memberSecret || proveMembershipLoading}
                 onClick={() => {
                   genProveMemberTx();
                 }}
-              >
-                VOTE
-              </button>
+              />
             </div>
           </div>
         ) : (

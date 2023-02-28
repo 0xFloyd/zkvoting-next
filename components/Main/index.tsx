@@ -46,7 +46,7 @@ const Main = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div>
+    <div className="relative">
       <div className="max-w-2xl mx-auto text-center mb-4 text-xl">
         <p>Create campaigns for your cause</p>
         <p className="mb-2">Use the power of zero knowledge proofs to allow for anonymous voting!</p>

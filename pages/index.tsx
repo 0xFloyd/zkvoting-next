@@ -21,6 +21,8 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { ConnectKitProvider, ConnectKitButton, getDefaultClient } from 'connectkit';
 import { ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Stars from '@/components/Stars';
+import { useEffect, useRef, useState } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -131,7 +133,10 @@ export default function Home() {
             '--ck-font-family': 'Power',
           }}
         >
-          <div className="h-screen overflow-x-hidden background-80s stars">
+          {/* background-80s stars */}
+
+          <div className="h-screen overflow-x-hidden">
+            <Stars />
             <div className="overlay" />
             <Header />
             <Main />

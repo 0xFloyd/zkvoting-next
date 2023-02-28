@@ -1,7 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { ConnectKitButton } from 'connectkit';
 import { toast } from 'react-toastify';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ConnectWallet from '../ConnectWallet';
 import { useContractRead } from 'wagmi';
 import contract from '@/contracts/contractconfig';

@@ -9,8 +9,8 @@ export default function Modal({ open, setOpen, children }) {
     <>
       <input type="checkbox" id="my-modal-4" className="modal-toggle" checked={open} onChange={handleClose} />
       <label htmlFor="my-modal-4" className="modal cursor-pointer">
-        <label className="modal-box relative" htmlFor="">
-          <label htmlFor="my-modal-4" className="btn btn-sm btn-circle absolute right-2 top-2">
+        <label className="modal-box bg-[rgb(5,8,33)] border-2  border-PINK relative" htmlFor="">
+          <label htmlFor="my-modal-4" className="hover:cursor-pointer p-2 absolute right-2 top-2">
             ✕
           </label>
           <div className="p-2">{children}</div>

@@ -147,6 +147,10 @@ input::-webkit-inner-spin-button {
   animation: pulsate 0.11s ease-in-out infinite alternate;
 } */
 
+.modal {
+  background-color: rgba(5, 8, 33, 0.75);
+}
+
 .graph-container {
   height: 100vh;
   overflow: hidden;
@@ -179,13 +183,19 @@ input::-webkit-inner-spin-button {
   position: absolute;
   left: 0;
   top: 0;
-  background-image: repeating-linear-gradient(
+  /* background-image: repeating-linear-gradient(
     rgba(0, 0, 0, 0.3) 0,
     transparent 1px,
     transparent 2px,
     rgba(0, 0, 0, 0.3) 3px
+  ); */
+  background-image: repeating-linear-gradient(
+    rgba(0, 0, 0, 1) 0,
+    transparent 1px,
+    rgba(0, 0, 0, 1) 0,
+    rgba(0, 0, 0, 1) 3px
   );
-  z-index: -1;
+  z-index: -2;
 }
 
 /*stars*/
