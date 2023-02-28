@@ -79,4 +79,7 @@ Ensure you have pasted your [Alchemy API](https://www.alchemy.com) key and deplo
 
 # Client
 
+Client is a [NextJS](https://nextjs.org/) app using [wagmi](https://wagmi.sh/) and [Family Connectkit](https://family.co/)
+Styled with [DaisyUI](https://daisyui.com/) and [Tailwind](https://tailwindcss.com/)
+
 TODO
