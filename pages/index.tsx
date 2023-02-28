@@ -1,27 +1,18 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import { Inter } from '@next/font/google';
 import { WagmiConfig, createClient, configureChains } from 'wagmi';
 import Header from '@/components/Header';
-import { mainnet, goerli, hardhat } from 'wagmi/chains';
-import { poseidon } from 'circomlibjs';
-import { useContractReader } from 'eth-hooks';
-import { ethers } from 'ethers';
+import { goerli, hardhat } from 'wagmi/chains';
 import Main from '@/components/Main';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { InjectedConnector } from 'wagmi/connectors/injected';
 import { publicProvider } from 'wagmi/providers/public';
-import { getDefaultWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { getDefaultWallets } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
-import Loading from '@/components/Loading';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { ConnectKitProvider, ConnectKitButton, getDefaultClient } from 'connectkit';
+import { ConnectKitProvider, getDefaultClient } from 'connectkit';
 import { ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Stars from '@/components/Stars';
-import { useEffect, useRef, useState } from 'react';
+import contract from '@/contracts/contractconfig';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -81,8 +72,6 @@ const chainid = 31337;
 // });
 
 const CHAIN = process.env.NEXT_PUBLIC_NETWORK === 'localhost' ? hardhat : goerli;
-
-console.log('process.env.NEXT_PUBLIC_NETWORK: ', process.env.NEXT_PUBLIC_NETWORK);
 
 const { chains, provider } = configureChains(
   [CHAIN],
@@ -154,7 +143,16 @@ export default function Home() {
               transition={Zoom}
             />
           </div>
-
+          {contract?.address && (
+            <a
+              href={`https://goerli.etherscan.io/address/${contract.address}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs text-secondaryGray absolute bottom-4 right-4 hover:text-PINK hover:cursor-pointer hover:underline"
+            >
+              {contract.address}
+            </a>
+          )}
           {/* </RainbowKitProvider> */}
         </ConnectKitProvider>
       </WagmiConfig>

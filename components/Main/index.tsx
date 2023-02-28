@@ -47,16 +47,13 @@ const Main = () => {
   const [open, setOpen] = useState(false);
 
   const [wallet, setWallet] = useState<string>('');
+  const [viewContract, setViewContract] = useState('');
   const { address } = useAccount();
   const { setOpen: setWalletOpen } = useModal();
 
   useEffect(() => {
     setWallet(address);
   }, [address]);
-
-  useEffect(() => {
-    console.log('New Contract: ', contract);
-  }, [contract]);
 
   return (
     <div className="relative">
