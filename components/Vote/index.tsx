@@ -154,8 +154,6 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
 
   let campaign = voteCampaigns?.find((campaign) => campaign.id == activeVoteId);
 
-  // console.log('voteCampaigns: ', voteCampaigns);
-
   return (
     <VoteCard title={'Vote'}>
       <div className="flex flex-col items-center h-full">
@@ -243,48 +241,31 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
           </div>
         ) : (
           <div className={`w-full flex flex-col max-h-[60vh] md:max-h-[40vh] relative`}>
-            <div className="mt-6 mx-8 flex flex-row place-content-between">
-              <p className="text-xs">NAME</p>
-              <p className="text-xs">DEADLINE</p>
-            </div>
-            <div className={`mt-2 mx-4 mb-6 overflow-y-scroll ${styles.listBlur}`}>
-              {voteCampaigns?.length > 0 ? (
-                voteCampaigns.map((option, i) => (
-                  <div
-                    className="my-3 rounded-lg border-secondaryGray border-opacity-20 border-2 flex flex-row place-content-between items-center px-4 py-3  w-full hover:bg-PINK hover:cursor-pointer hover:-translate-y-0.5  transition-all"
-                    key={`${option.id}${i}`}
-                    onClick={(e) => {
-                      address ? setActiveVoteId(option.id) : setWalletOpen(true);
-                    }}
-                  >
-                    <p className="text-md capitalize">{option?.name}</p>
-                    <p className="text-xs">{option?.deadline}</p>
-                  </div>
-                ))
-              ) : (
-                // <div>
-                //   <p className="mb-1 text-lg">Select a campaign to cast a vote</p>
-                //   <select
-                //     value={activeVoteId}
-                //     onChange={(e) => {
-                //       setActiveVoteId(e.target.value);
-                //     }}
-                //     className="select select-bordered w-full max-w-xs"
-                //   >
-                //     <option value={''} disabled>
-                //       select campaign
-                //     </option>
-                //     {voteCampaigns.map((option) => (
-                //       <option key={option.id} value={option.id}>
-                //         {option.name}
-                //       </option>
-                //     ))}
-                //   </select>
-                // </div>
-                <p className="text-xl">No campaigns exist</p>
-              )}
-            </div>
-            <div className={`${styles.bottomBlur}`} />
+            {voteCampaigns?.length > 0 ? (
+              <>
+                <div className="mt-6 mx-8 flex flex-row place-content-between">
+                  <p className="text-xs">NAME</p>
+                  <p className="text-xs">DEADLINE</p>
+                </div>
+                <div className={`mt-2 mx-4 mb-6 overflow-y-scroll ${styles.listBlur}`}>
+                  {voteCampaigns.map((option, i) => (
+                    <div
+                      className="my-3 rounded-lg border-secondaryGray border-opacity-20 border-2 flex flex-row place-content-between items-center px-4 py-3  w-full hover:bg-PINK hover:cursor-pointer hover:-translate-y-0.5  transition-all"
+                      key={`${option.id}${i}`}
+                      onClick={(e) => {
+                        address ? setActiveVoteId(option.id) : setWalletOpen(true);
+                      }}
+                    >
+                      <p className="text-md capitalize">{option?.name}</p>
+                      <p className="text-xs">{option?.deadline}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className={`${styles.bottomBlur}`} />
+              </>
+            ) : (
+              <p className="text-xl m-12 text-center">No campaigns exist</p>
+            )}
           </div>
         )}
       </div>

@@ -32,9 +32,11 @@ const Header = () => {
       </div>
       <div className="w-full absolute top-2 right-2 flex flex-row place-content-between md:place-content-end items-center">
         {/* <ConnectWallet /> */}
-        <p className="text-white ml-4 md:ml-0 md:mr-4 text-xs md:text-base bg-slate-900 border-PINK border-2 rounded-xl px-3 py-1.5">{`${voterCount} Registered Voter${
-          voterCount == 1 ? '' : 's'
-        }`}</p>
+        {voterCount || voterCount === 0 ? (
+          <p className="text-white ml-4 md:ml-0 md:mr-4 text-xs md:text-base bg-slate-900 border-PINK border-2 rounded-xl px-3 py-1.5">{`${voterCount} Registered Voter${
+            voterCount == 1 ? '' : 's'
+          }`}</p>
+        ) : null}
         {/* <Button
           text={'Create Campaign'}
           className={'bg-PINK text-white btn-sm !rounded-xl'}
