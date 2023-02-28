@@ -29,6 +29,7 @@ const Main = () => {
     async listener(key: any, value: any) {
       let temp = leaves;
       temp[key] = value?.toString();
+
       setLeaves(temp);
     },
   });
@@ -41,6 +42,8 @@ const Main = () => {
   //   }
   //   setLeaves(lfv);
   // }, [addLeafEvents]);
+
+  console.log('leaves: ', leaves);
 
   const calcedSMT = useSMT(leaves);
 
