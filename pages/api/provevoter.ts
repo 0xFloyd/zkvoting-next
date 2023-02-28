@@ -10,10 +10,15 @@ const crypto = require('crypto');
 
 const projectRoot = getConfig().serverRuntimeConfig.PROJECT_ROOT;
 
-const add2TreeWasm = path.join(projectRoot, '/circuits/add2Tree.wasm');
-const add2TreeZkey = path.join(projectRoot, '/circuits/add2Tree.zkey');
-const proveInTreeWasm = path.join(projectRoot, '/circuits/proveInTree.wasm');
-const proveInTreeZkey = path.join(projectRoot, '/circuits/proveInTree.zkey');
+// const add2TreeWasm = path.join(projectRoot, '/circuits/add2Tree.wasm');
+// const add2TreeZkey = path.join(projectRoot, '/circuits/add2Tree.zkey');
+// const proveInTreeWasm = path.join(projectRoot, '/circuits/proveInTree.wasm');
+// const proveInTreeZkey = path.join(projectRoot, '/circuits/proveInTree.zkey');
+
+const directory = path.join(process.cwd(), 'circuits');
+
+const proveInTreeWasm = path.join(directory, '/proveInTree.wasm');
+const proveInTreeZkey = path.join(directory, '/proveInTree.zkey');
 
 const BIGINTKETS = {
   oldRoot: true,

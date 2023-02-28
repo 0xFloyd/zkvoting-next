@@ -4,19 +4,22 @@ import serverPath from '../../utils/server';
 import getConfig from 'next/config';
 import path from 'path';
 import { parseSolidityCalldata } from '@/utils/utils';
+import fs from 'fs';
 
 const snarkjs = require('snarkjs');
 const crypto = require('crypto');
 
 const projectRoot = getConfig().serverRuntimeConfig.PROJECT_ROOT;
 
+const directory = path.join(process.cwd(), 'circuits');
+
 // const add2TreeWasm = path.join(projectRoot, '/circuits/add2Tree.wasm');
 // const add2TreeZkey = path.join(projectRoot, '/circuits/add2Tree.zkey');
-const proveInTreeWasm = path.join(projectRoot, '/circuits/proveInTree.wasm');
-const proveInTreeZkey = path.join(projectRoot, '/circuits/proveInTree.zkey');
+// const proveInTreeWasm = path.join(projectRoot, '/circuits/proveInTree.wasm');
+// const proveInTreeZkey = path.join(projectRoot, '/circuits/proveInTree.zkey');
 
-const add2TreeWasm = path.join(__dirname, '..', 'circuits', 'add2Tree.wasm');
-const add2TreeZkey = path.join(__dirname, '..', 'circuits', 'add2Tree.zkey');
+const add2TreeWasm = path.join(directory, '/add2Tree.wasm');
+const add2TreeZkey = path.join(directory, '/add2Tree.zkey');
 
 const BIGINTKETS = {
   oldRoot: true,
@@ -53,6 +56,7 @@ export default async function addvoter(req: NextApiRequest, res: NextApiResponse
     //     addLeafInputs.siblings[i] = res.siblings[i];
     //   }
     // }
+
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(transform, add2TreeWasm, add2TreeZkey);
     const calldata = parseSolidityCalldata(proof, publicSignals);
 
