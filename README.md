@@ -76,3 +76,7 @@ Localhost:
 Goerli:
 Ensure you have pasted your [Alchemy API](https://www.alchemy.com) key and deployer wallet private key in the .env file copying the variables from the .env.example file
 `yarn run deploy --network goerli`
+
+# Client
+
+TODO
