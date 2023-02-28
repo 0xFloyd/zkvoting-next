@@ -135,7 +135,7 @@ export default function Home() {
         >
           {/* background-80s stars */}
 
-          <div className="h-screen overflow-x-hidden relative">
+          <div className="min-h-screen overflow-x-hidden relative pb-12">
             <Stars />
             <div className="overlay" />
             <Header />

@@ -4,15 +4,21 @@ import { useAccount, useContractRead } from 'wagmi';
 import { waitForTransaction, writeContract, prepareWriteContract } from '@wagmi/core';
 import VoteCard from '../VoteCard';
 import Input from '../Input';
-
 import { toast } from 'react-toastify';
 import Etherscan from '../Etherscan';
 import Button from '../Button';
 import { trimString } from '@/utils/utils';
 import { processErrors } from '@/utils/errors';
+import styles from './Vote.module.css';
 
 const Vote = ({ root, nLevels, calcedSMT }) => {
-  const [voteCampaigns, setVoteCampaigns] = useState([]);
+  const [voteCampaigns, setVoteCampaigns] = useState([
+    { id: 5, name: 'one' },
+    { id: 6, name: 'two' },
+    { id: 7, name: 'three' },
+    { id: 8, name: 'four' },
+    { id: 9, name: 'five' },
+  ]);
   const [activeVoteId, setActiveVoteId] = useState<string | number>('');
 
   const [positiveCount, setPositiveCount] = useState(0);
@@ -120,12 +126,15 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
     let campaigns = [];
     const count = await readContractFunction('proposalCounter');
     for (let i = 1; i < Number(count); i++) {
-      const campaignName = await readContractFunction('campaignName', i);
+      const name = await readContractFunction('campaignName', i);
+      const timestamp = await readContractFunction('voteDeadline', i);
 
-      campaigns.push({ id: i, name: campaignName });
+      const deadline = convertDate(timestamp);
+      console.log('deadline: ', deadline);
+      campaigns.push({ id: i, name, deadline });
     }
 
-    setVoteCampaigns(campaigns);
+    setVoteCampaigns((prevState) => [...prevState, ...campaigns]);
   };
 
   useEffect(() => {
@@ -149,9 +158,11 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
 
   let campaign = voteCampaigns?.find((campaign) => campaign.id == activeVoteId);
 
+  // console.log('voteCampaigns: ', voteCampaigns);
+
   return (
     <VoteCard title={'Vote'}>
-      <div className="flex flex-col items-center h-full px-8 pt-4 pb-8">
+      <div className="flex flex-col items-center h-full">
         {activeVoteId ? (
           <div className="m-auto">
             <p className="capitalize text-center text-2xl mb-2">{`${campaign ? campaign?.name : ''} Campaign`}</p>
@@ -235,30 +246,49 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
             </div>
           </div>
         ) : (
-          <div className="m-auto">
-            {voteCampaigns?.length > 0 ? (
-              <div>
-                <p className="mb-1 text-lg">Select a campaign to cast a vote</p>
-                <select
-                  value={activeVoteId}
-                  onChange={(e) => {
-                    setActiveVoteId(e.target.value);
-                  }}
-                  className="select select-bordered w-full max-w-xs"
-                >
-                  <option value={''} disabled>
-                    select campaign
-                  </option>
-                  {voteCampaigns.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ) : (
-              <p className="text-xl">No campaigns exist</p>
-            )}
+          <div className={`w-full flex flex-col max-h-[60vh] md:max-h-[40vh] relative`}>
+            <div className="mt-6 mx-8 flex flex-row place-content-between">
+              <p className="text-xs">NAME</p>
+              <p className="text-xs">DEADLINE</p>
+            </div>
+            <div className={`mt-2 mx-4 mb-6 overflow-y-scroll ${styles.listBlur}`}>
+              {voteCampaigns?.length > 0 ? (
+                voteCampaigns.map((option, i) => (
+                  <div
+                    className="my-3 rounded-lg border-secondaryGray border-opacity-20 border-2 flex flex-row place-content-between items-center px-4 py-3  w-full hover:bg-PINK hover:cursor-pointer hover:-translate-y-0.5  transition-all"
+                    key={`${option.id}${i}`}
+                    onClick={(e) => {
+                      setActiveVoteId(option.id);
+                    }}
+                  >
+                    <p className="text-md capitalize">{option?.name}</p>
+                    <p className="text-xs">{option?.deadline}</p>
+                  </div>
+                ))
+              ) : (
+                // <div>
+                //   <p className="mb-1 text-lg">Select a campaign to cast a vote</p>
+                //   <select
+                //     value={activeVoteId}
+                //     onChange={(e) => {
+                //       setActiveVoteId(e.target.value);
+                //     }}
+                //     className="select select-bordered w-full max-w-xs"
+                //   >
+                //     <option value={''} disabled>
+                //       select campaign
+                //     </option>
+                //     {voteCampaigns.map((option) => (
+                //       <option key={option.id} value={option.id}>
+                //         {option.name}
+                //       </option>
+                //     ))}
+                //   </select>
+                // </div>
+                <p className="text-xl">No campaigns exist</p>
+              )}
+            </div>
+            <div className={`${styles.bottomBlur}`} />
           </div>
         )}
       </div>
@@ -267,3 +297,15 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
 };
 
 export default Vote;
+
+const convertDate = (timestamp) => {
+  const date = new Date(timestamp * 1000);
+  const year = date.getFullYear().toString().slice(-2);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const dateString = `${date.getMonth() + 1}/${date.getDate()}/${year} ${formattedHours}:${formattedMinutes} ${ampm}`;
+  return dateString;
+};

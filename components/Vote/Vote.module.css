@@ -1,0 +1,27 @@
+.listBlur {
+  position: relative;
+  z-index: 1;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer and Edge */
+}
+
+.listBlur::-webkit-scrollbar {
+  display: none; /* WebKit-based browsers */
+}
+
+.bottomBlur {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(transparent, #050821);
+  filter: blur(10px);
+  z-index: 1;
+  pointer-events: none;
+  margin-bottom: 1rem;
+
+  /* #050821 */
+}

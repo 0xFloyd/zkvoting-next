@@ -47,7 +47,7 @@ const Main = () => {
 
   return (
     <div className="relative">
-      <div className="max-w-2xl mx-auto text-center mb-4 text-xl">
+      <div className="max-w-2xl mx-auto text-center mb-4 text-xl px-4">
         <p>Create campaigns for your cause</p>
         <p className="mb-2">Use the power of zero knowledge proofs to allow for anonymous voting!</p>
         <Button
@@ -60,7 +60,7 @@ const Main = () => {
       <Modal open={open} setOpen={setOpen}>
         <CreateCampaign />
       </Modal>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-7xl mx-auto p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto p-4">
         <Register
           root={root}
           nLevels={nLevels}

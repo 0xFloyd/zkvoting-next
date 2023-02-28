@@ -245,7 +245,7 @@ input::-webkit-inner-spin-button {
 
   opacity: 0.3;
   transform-origin: center center;
-  animation: glitter 2s infinite, rotateY 500s linear infinite;
+  animation: glitter 2s infinite, rotateY 750s linear infinite;
 }
 
 @keyframes rotateY {
