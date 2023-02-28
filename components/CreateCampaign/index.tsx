@@ -18,7 +18,7 @@ const CreateCampaign = ({ setOpen }) => {
       const config = await prepareWriteContract({
         ...contract,
         functionName: 'createProposal',
-        args: [Math.floor(Date.now() / 1000) + 10000, campaignInput],
+        args: [Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, campaignInput],
       });
 
       const { hash } = await writeContract(config);
