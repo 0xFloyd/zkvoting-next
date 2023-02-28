@@ -1,5 +1,4 @@
 // Clearer error messages from libraries like circomlibjs
-
 const KEY_EXISTS = { error: 'Key already exists', result: 'Wallet already registered' };
 
 const processErrors = (error) => {

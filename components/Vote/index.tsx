@@ -65,7 +65,6 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
         body: stringify,
       });
 
-      // TODO only if successful 200 response
       const data = await response
         .json()
         .then(async (res) => {
@@ -78,7 +77,7 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
               args: [...JSON.parse(res), vote],
             });
 
-            const { hash, wait } = await writeContract(config);
+            const { hash } = await writeContract(config);
             toast(<Etherscan hash={hash} />);
             const txResult = await waitForTransaction({ hash });
             toast('TX Confirmed');

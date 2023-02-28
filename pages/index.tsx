@@ -1,12 +1,9 @@
 import Head from 'next/head';
-import { Inter } from '@next/font/google';
 import { WagmiConfig, createClient, configureChains } from 'wagmi';
 import Header from '@/components/Header';
 import { goerli, hardhat } from 'wagmi/chains';
 import Main from '@/components/Main';
 import { publicProvider } from 'wagmi/providers/public';
-import { getDefaultWallets } from '@rainbow-me/rainbowkit';
-import '@rainbow-me/rainbowkit/styles.css';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { ConnectKitProvider, getDefaultClient } from 'connectkit';
 import { ToastContainer, Zoom } from 'react-toastify';
@@ -14,97 +11,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import Stars from '@/components/Stars';
 import contract from '@/contracts/contractconfig';
 
-const inter = Inter({ subsets: ['latin'] });
-
-const alchemyId = 'sEmqlfcdWUUs-dU7PuO5LuSt8dF6KhZ1';
-
-// const alchemyId = process.env.ALCHEMY_ID;
-
-// Another alternative is to create an additional network at MetaMask, name it localhost, use the address http://127.0.0.1:8545, and chainId 31337
-
-const address = 'http://127.0.0.1:8545/';
-const chainid = 31337;
-
-// const connector = new InjectedConnector({
-//   chains: [
-//     {
-//       id: 31337,
-//       name: 'hardhat',
-//       testnet: false,
-//       network: 'localhost',
-//       rpcUrls: {
-//         default: { http: ['http://127.0.0.1:8545'] },
-//         public: { http: ['http://127.0.0.1:8545'] },
-//       },
-//       nativeCurrency: {
-//         decimals: 18,
-//         name: 'ethereum',
-//         symbol: 'eth',
-//       },
-//     },
-//   ], //[...defaultChains, ...defaultL2Chains],
-// });
-
-// const { chains, provider } = configureChains(
-//   [hardhat],
-//   [
-//     jsonRpcProvider({
-//       rpc: (chain) => ({
-//         http: 'http://127.0.0.1:8545',
-//       }),
-//     }),
-//   ]
-// );
-
-// const client = createClient({
-//   autoConnect: true,
-//   provider: provider,
-//   connectors: [
-//     new MetaMaskConnector({ chains }),
-//     new InjectedConnector({
-//       chains,
-//       options: {
-//         name: 'Injected',
-//         shimDisconnect: true,
-//       },
-//     }),
-//   ],
-// });
+const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
 
 const CHAIN = process.env.NEXT_PUBLIC_NETWORK === 'localhost' ? hardhat : goerli;
 
-const { chains, provider } = configureChains(
-  [CHAIN],
-  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }), publicProvider()]
-);
-
-const { connectors } = getDefaultWallets({
-  appName: 'My RainbowKit App',
-  chains,
-});
-
-// export const client = createClient({
-//   autoConnect: true,
-//   connectors,
-//   provider,
-// });
+const { chains } = configureChains([CHAIN], [alchemyProvider({ apiKey: alchemyId }), publicProvider()]);
 
 const familyClient = createClient(
   getDefaultClient({
-    appName: 'Your App Name',
+    appName: 'zk voting',
     alchemyId,
     chains,
   })
 );
-
-// goerli
-// const client = createClient(
-//   getDefaultClient({
-//     appName: 'zk voting',
-//     alchemyId,
-//     chains: [goerli],
-//   })
-// );
 
 export default function Home() {
   return (
@@ -116,7 +35,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <WagmiConfig client={familyClient}>
-        {/* <RainbowKitProvider chains={chains} modalSize="compact"> */}
         <ConnectKitProvider
           customTheme={{
             '--ck-connectbutton-background': 'var(--primary)',
@@ -125,8 +43,7 @@ export default function Home() {
             '--ck-font-family': 'Power',
           }}
         >
-          {/* background-80s stars */}
-
+          {/* background-80s */}
           <div className="min-h-screen overflow-x-hidden relative pb-12">
             <Stars />
             <div className="overlay" />
@@ -153,7 +70,6 @@ export default function Home() {
               {contract.address}
             </a>
           )}
-          {/* </RainbowKitProvider> */}
         </ConnectKitProvider>
       </WagmiConfig>
     </>

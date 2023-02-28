@@ -1,5 +1,3 @@
-import { Fragment, useState } from 'react';
-
 export default function Modal({ open, setOpen, children }) {
   const handleClose = () => {
     setOpen(false);

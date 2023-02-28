@@ -18,7 +18,6 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const chainId = await getChainId();
 
   await deploy('ZKVoting', {
-    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     log: true,
   });
@@ -32,7 +31,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     address you want to be the owner. 
     // ZKVoting.transferOwnership(YOUR_ADDRESS_HERE);
 
-    //const ZKVoting = await ethers.getContractAt('ZKVoting', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
+   
   */
 
   //If you want to send value to an address from the deployer
@@ -41,21 +40,9 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //   to: '0x905cb00659B503af942421B75918Ceda47D2798f',
   //   value: ethers.utils.parseEther('0.1'),
   // });
-  // await deployerWallet.sendTransaction({
-  //   to: '0x93e5DEca5911c3B981B52A75A24391e755f1b017',
-  //   value: ethers.utils.parseEther('0.1'),
-  // });
-
-  /*
-  //If you want to send some ETH to a contract on deploy (make your constructor payable!)
-  const ZKVoting = await deploy("ZKVoting", [], {
-  value: ethers.utils.parseEther("0.05")
-  });
-  */
 
   /*
   //If you want to link a library into your contract:
-  // reference: https://github.com/austintgriffith/scaffold-eth/blob/using-libraries-example/packages/hardhat/scripts/deploy.js#L19
   const ZKVoting = await deploy("ZKVoting", [], {}, {
    LibraryName: **LibraryAddress**
   });

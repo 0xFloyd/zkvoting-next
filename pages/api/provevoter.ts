@@ -1,29 +1,13 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import serverPath from '../../utils/server';
-import getConfig from 'next/config';
 import path from 'path';
 import { parseSolidityCalldata } from '@/utils/utils';
 
 const snarkjs = require('snarkjs');
-const crypto = require('crypto');
-
-const projectRoot = getConfig().serverRuntimeConfig.PROJECT_ROOT;
-
-// const add2TreeWasm = path.join(projectRoot, '/circuits/add2Tree.wasm');
-// const add2TreeZkey = path.join(projectRoot, '/circuits/add2Tree.zkey');
-// const proveInTreeWasm = path.join(projectRoot, '/circuits/proveInTree.wasm');
-// const proveInTreeZkey = path.join(projectRoot, '/circuits/proveInTree.zkey');
 
 const directory = path.join(process.cwd(), 'circuits');
 
 const proveInTreeWasm = path.join(directory, '/proveInTree.wasm');
 const proveInTreeZkey = path.join(directory, '/proveInTree.zkey');
-
-const BIGINTKETS = {
-  oldRoot: true,
-  newKey: true,
-};
 
 export default async function provevoter(req: NextApiRequest, res: NextApiResponse) {
   try {

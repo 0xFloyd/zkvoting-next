@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useLocalStorage } from './';
-import { SMT, hexToDec } from '@cedoor/smt';
 import { poseidon, smt } from 'circomlibjs';
 
 const hash = (nodes) => poseidon(nodes);

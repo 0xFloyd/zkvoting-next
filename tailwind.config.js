@@ -25,7 +25,4 @@ module.exports = {
     },
   },
   plugins: [require('daisyui')],
-  // daisyui: {
-  //   themes: ['coffee', 'luxury', 'cyberpunk'],
-  // },
 };

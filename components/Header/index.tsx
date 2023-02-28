@@ -1,15 +1,10 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { ConnectKitButton } from 'connectkit';
-import { toast } from 'react-toastify';
-import React, { useEffect, useState, useRef } from 'react';
-import ConnectWallet from '../ConnectWallet';
+import React, { useEffect, useState } from 'react';
 import { useContractRead } from 'wagmi';
 import contract from '@/contracts/contractconfig';
-import Button from '../Button';
 
 const Header = () => {
   const [voterCount, setVoterCount] = useState(0);
-  const [open, setOpen] = useState(false);
   const title = ['Z', 'K', ` `, 'V', 'o', 'T', 'I', 'N', 'g'];
   const { data: voters }: any = useContractRead({
     ...contract,
@@ -31,18 +26,12 @@ const Header = () => {
         ))}
       </div>
       <div className="w-full absolute top-2 right-2 flex flex-row place-content-between md:place-content-end items-center">
-        {/* <ConnectWallet /> */}
         {voterCount || voterCount === 0 ? (
           <p className="text-white ml-4 md:ml-0 md:mr-4 text-xs md:text-base bg-slate-900 border-PINK border-2 rounded-xl px-3 py-1.5">{`${voterCount} Registered Voter${
             voterCount == 1 ? '' : 's'
           }`}</p>
         ) : null}
-        {/* <Button
-          text={'Create Campaign'}
-          className={'bg-PINK text-white btn-sm !rounded-xl'}
-          disabled={false}
-          onClick={() => setOpen(!open)}
-        /> */}
+
         <ConnectKitButton />
       </div>
     </div>

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount, useContractRead, useContractEvent } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import { poseidon } from 'circomlibjs';
-import contract, { readContractFunction } from '../../contracts/contractconfig';
-import { parseSolidityCalldata, trimString } from '@/utils/utils';
+import contract from '../../contracts/contractconfig';
+import { trimString } from '@/utils/utils';
 import { prepareWriteContract, writeContract, waitForTransaction } from '@wagmi/core';
-import Loading from '../Loading';
 import crypto from 'crypto';
 import Input from '../Input';
 import Button from '../Button';
@@ -55,8 +54,6 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
         }
       }
 
-      // console.log('addLeafInputs:', addLeafInputs);
-
       let stringify = JSON.stringify(
         addLeafInputs,
         (key, value) => (typeof value === 'bigint' ? value.toString() : value) // return everything else unchanged
@@ -67,7 +64,6 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
         body: stringify,
       });
 
-      // TODO only if successful 200 response
       const leafData = await response
         .json()
         .then(async (res) => {
@@ -82,11 +78,11 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
 
             const { hash, wait } = await writeContract(config);
             toast(<Etherscan hash={hash} />);
-            // toast.promise(wait, { pending: <Etherscan hash={hash} />, success: 'TX Success' });
+
             const data = await waitForTransaction({
               hash,
             });
-            // const result = await tx.wait();
+
             toast('TX Confirmed');
             setAddLeafTxLoading(false);
             setSecrets([0, 0]);
@@ -149,16 +145,6 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
               value={voterCounter ? voterCounter : 0}
             />
 
-            {/* <div className="mt-1 flex rounded-md shadow-sm">
-        <span className="inline-flex items-center rounded-l-md   border-r-0 px-3 sm:text-sm">Secret</span>
-        <input
-          type="number"
-          placeholder="enter secret number"
-          className="input input-bordered w-full max-w-xs border-l-0 rounded-l-none focus:outline-none border-2 focus:border-red-500"
-          value={Number(secrets[0]) > 0 ? Number(secrets[0]) : ''}
-          onChange={(e) => handleUserInput(e.target.value, true)}
-        />
-      </div> */}
             <Input
               label={'SECRET'}
               type={'number'}
@@ -186,8 +172,6 @@ const Register = ({ root, nLevels, secrets, setSecrets, setPoseidonHash, calcedS
           </div>
         </div>
       </VoteCard>
-
-      {/* https://github.com/wagmi-dev/wagmi/blob/main/docs/components/examples/ContractWrite.tsx */}
     </>
   );
 };

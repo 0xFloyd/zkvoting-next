@@ -1,5 +1,5 @@
 import contracts from './hardhat_contracts.json';
-import { readContract, writeContract, prepareWriteContract } from '@wagmi/core';
+import { readContract } from '@wagmi/core';
 
 const hardhatContract = contracts[31337]?.localhost?.contracts?.ZKVoting;
 const goerliContract = contracts[5]?.goerli?.contracts?.ZKVoting;
