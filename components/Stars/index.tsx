@@ -20,12 +20,11 @@ const Stars = () => {
     const element = elementRef.current;
     const x = (mousePosition.x - window.innerWidth / 2) / window.innerWidth;
     const y = (mousePosition.y - window.innerHeight / 2) / window.innerHeight;
-    const rotateX = y * 2.5;
-    const rotateY = x * 2.5;
+    const rotateX = y * 1;
+    const rotateY = x * 1;
     const translateX = x * -5;
     const translateY = y * -5;
-
-    element.style.transform = `perspective(1000px) translateX(${translateX}px) translateY(${translateY}px)`;
+    element.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateX(${translateX}px) translateY(${translateY}px)`;
   }, [mousePosition]);
 
   return <div className="stars" ref={elementRef} />;

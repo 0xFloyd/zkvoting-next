@@ -200,22 +200,61 @@ input::-webkit-inner-spin-button {
 
 /*stars*/
 .stars:after {
-  transform: translateY(-40%);
   content: ' ';
   border-radius: 100%;
   width: 3px;
   height: 4px;
-  position: absolute;
-  left: 0;
-  top: 0;
+  position: fixed;
+  left: 50%;
+  top: 50%;
   z-index: -1;
-  box-shadow: 5vw 15vh 2px white, 1vw 33vh 0px white, 2vw 25vh 2px white, 10vw 10vh 2px white, 12vw 20vh 0px white,
+  box-shadow: 
+  /* 5vw 15vh 2px white, 1vw 33vh 0px white, 2vw 25vh 2px white, 10vw 10vh 2px white, 12vw 20vh 0px white,
     30vw 15vh 2px white, 16vw 5vh 2px white, 24vw 10vh 0px white, 32vw 40vh 0px white, 33vw 35vh 2px white,
     12vw 38vh 2px white, 24vw 10vh 0px white, 33vw 5vh 2px white, 20vw 10vh 0px white, 80vw 10vh 2px white,
     62vw 20vh 0px white, 60vw 15vh 2px white, 70vw 7vh 0px white, 62vw 50vh 0px white, 65vw 35vh 2px white,
-    64vw 10vh 0px white, 85vw 2vh 0px white, 92vw 40vh 0px white, 75vw 35vh 2px white, 90vw 10vh 0px white;
+    64vw 10vh 0px white, 85vw 2vh 0px white, 92vw 40vh 0px white, 75vw 35vh 2px white, 90vw 10vh 0px white, */ 23vw
+      70vh 2px white,
+    -54vw 42vh 0px white, -11vw 68vh 2px white, 41vw -53vh 2px white, 38vw 70vh 0px white, 50vw -94vh 2px white,
+    -46vw -17vh 2px white, -28vw -25vh 0px white, -45vw -28vh 0px white, 9vw 5vh 2px white, 69vw -32vh 2px white,
+    16vw 54vh 0px white, -72vw -18vh 0px white, -31vw -29vh 2px white, -18vw 43vh 0px white, -5vw 38vh 2px white,
+    27vw -36vh 0px white, 72vw 31vh 0px white, -17vw -13vh 2px white, -47vw -95vh 0px white, -56vw -36vh 2px white,
+    -94vw 64vh 2px white, 85vw -94vh 2px white, 2vw 69vh 0px white, -31vw 89vh 0px white, -84vw -4vh 2px white,
+    63vw -70vh 0px white, -58vw 47vh 0px white, -95vw -52vh 0px white, -96vw 78vh 2px white, -22vw -56vh 2px white,
+    43vw 13vh 0px white, -46vw -78vh 0px white, -49vw 27vh 2px white, -20vw 4vh 0px white, -69vw 8vh 0px white,
+    -63vw 36vh 2px white, -17vw -80vh 2px white, -91vw -78vh 0px white, -77vw 27vh 2px white, 22vw -64vh 2px white,
+    8vw 77vh 0px white, 61vw -5vh 2px white, -60vw -69vh 0px white, 16vw -31vh 2px white, -95vw 79vh 2px white,
+    48vw 89vh 0px white, 10vw -47vh 0px white, -50vw -26vh 0px white, 58vw -33vh 2px white, -2vw 92vh 2px white,
+    -12vw -70vh 0px white, -6vw -3vh 0px white, -80vw 55vh 2px white, 64vw -30vh 2px white, -9vw 95vh 0px white,
+    -70vw -11vh 0px white, 57vw -51vh 0px white, -47vw 80vh 2px white, 39vw 43vh 2px white, 25vw 32vh 0px white,
+    -92vw 68vh 2px white, -89vw 16vh 0px white, -77vw -17vh 0px white, -15vw -94vh 0px white, -25vw 45vh 2px white,
+    95vw -13vh 2px white, 8vw 32vh 0px white, -60vw -42vh 2px white, 16vw -61vh 2px white, 60vw -74vh 0px white,
+    -49vw -15vh 0px white, 20vw -95vh 2px white, -35vw 70vh 2px white, 16vw 84vh 2px white, 33vw 30vh 0px white,
+    7vw 22vh 0px white, -69vw 22vh 0px white, -71vw -94vh 0px white, 22vw 50vh 2px white, -10vw -57vh 2px white,
+    69vw 33vh 2px white, 78vw -94vh 0px white, -69vw 44vh 0px white, -56vw -3vh 2px white, 26vw 48vh 2px white,
+    -97vw 10vh 2px white, 91vw 32vh 0px white, -83vw -50vh 0px white, -80vw -16vh 0px white, 45vw -53vh 2px white,
+    16vw 85vh 2px white, -30vw 27vh 0px white, -31vw -64vh 2px white, 32vw -72vh 2px white, 43vw 31vh 2px white,
+    -2vw -61vh 0px white, -8vw -3vh 0px white, -77vw -5vh 0px white, 51vw 47vh 2px white, -96vw -34vh 0px white,
+    -73vw -48vh 0px white, -13vw -9vh 2px white, -38vw 66vh 2px white, 35vw -12vh 2px white, 8vw -89vh 0px white,
+    -90vw 49vh 0px white, -52vw -39vh 0px white, -54vw -59vh 0px white, 83vw 29vh 2px white, -70vw 22vh 0px white,
+    -97vw -26vh 0px white, -12vw 87vh 2px white, -98vw 52vh 0px white, 97vw -44vh 0px white, -67vw 22vh 2px white,
+    -33vw -27vh 0px white, 35vw 68vh 2px white, -87vw -34vh 2px white, 19vw -24vh 2px white, -16vw -84vh 0px white,
+    -98vw -67vh 0px white, -34vw -98vh 0px white, -51vw -90vh 0px white, 72vw 94vh 2px white, 2vw 50vh 0px white,
+    -29vw -16vh 0px white, 91vw -49vh 0px white, -68vw -69vh 2px white, 51vw -66vh 2px white, -5vw 22vh 2px white,
+    17vw 25vh 0px white, -77vw -53vh 0px white, 33vw -39vh 0px white, 54vw 15vh 2px white;
+
   opacity: 0.3;
-  animation: glitter 2s infinite;
+  transform-origin: center center;
+  animation: glitter 2s infinite, rotateY 500s linear infinite;
+}
+
+@keyframes rotateY {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes glitter {

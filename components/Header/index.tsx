@@ -32,7 +32,7 @@ const Header = () => {
       </div>
       <div className="absolute top-2 right-2 flex flex-row items-center">
         {/* <ConnectWallet /> */}
-        <p className="text-white mr-4 text-md border-PINK border-2 rounded-xl px-3 py-1.5">{`${voterCount} Registered Voter${
+        <p className="text-white mr-4 text-md bg-slate-900 border-PINK border-2 rounded-xl px-3 py-1.5">{`${voterCount} Registered Voter${
           voterCount == 1 ? '' : 's'
         }`}</p>
         {/* <Button
