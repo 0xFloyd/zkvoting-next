@@ -7,7 +7,7 @@ const processErrors = (error) => {
   const errorTwoReasonRegex = /execution reverted: (.+?),/;
   const match = errorReasonRegex.exec(error);
   const matchTwo = errorTwoReasonRegex.exec(error);
-  console.log('matchTwo: ', matchTwo);
+
   let e = error;
   if (match && match[0]) {
     e = match[0];
