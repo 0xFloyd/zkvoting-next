@@ -190,10 +190,10 @@ input::-webkit-inner-spin-button {
     rgba(0, 0, 0, 0.3) 3px
   ); */
   background-image: repeating-linear-gradient(
-    rgba(0, 0, 0, 1) 0,
-    transparent 1px,
-    rgba(0, 0, 0, 1) 0,
-    rgba(0, 0, 0, 1) 3px
+    rgba(0, 0, 0, 1) 0.1rem,
+    transparent 0.2rem,
+    rgba(0, 0, 0, 1) 0.3rem,
+    rgba(0, 0, 0, 1) 0.4rem
   );
   z-index: -2;
 }
