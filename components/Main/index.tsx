@@ -54,7 +54,7 @@ const Main = () => {
 
   return (
     <div className="relative">
-      <div className="max-w-2xl mx-auto text-center mb-4 text-sm xl:text-lg 2xl:text-xl px-4">
+      <div className="max-w-2xl mx-auto text-center mb-4 md:mb-8 text-sm xl:text-lg 2xl:text-xl px-4">
         <p>Create campaigns for a cause</p>
         <p className="mb-2">Use the power of zero knowledge proofs to allow for anonymous voting!</p>
         <Button
