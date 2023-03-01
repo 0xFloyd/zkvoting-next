@@ -17,8 +17,8 @@ const Header = () => {
   }, [voters]);
 
   return (
-    <div className="w-full flex flex-row place-content-center items-center overflow-hidden mb-2 md:mb-8">
-      <div className="text-center text-6xl xl:text-9xl italic double-layer mt-20 md:mt-16">
+    <div className="w-full flex flex-row place-content-center items-center overflow-hidden mb-2 md:mb-4">
+      <div className="text-center text-6xl md:text-7xl xl:text-8xl 2xl:text-9xl italic double-layer mt-20 md:mt-8">
         {title.map((letter, i) => (
           <span key={`${letter}${i}`} className="font-LaserCorps glow" data-title={letter}>
             {letter}

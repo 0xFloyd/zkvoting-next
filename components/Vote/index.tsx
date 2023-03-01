@@ -238,7 +238,7 @@ const Vote = ({ root, nLevels, calcedSMT }) => {
             </div>
           </div>
         ) : (
-          <div className={`w-full flex flex-col h-full max-h-[60vh] md:max-h-[40vh] relative`}>
+          <div className={`w-full flex flex-col h-full min-h-[30vh] max-h-[50vh] md:max-h-[40vh] relative`}>
             {voteCampaigns?.length > 0 ? (
               <>
                 <div className="mt-6 mx-8 flex flex-row place-content-between">
