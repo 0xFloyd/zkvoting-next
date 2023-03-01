@@ -5,13 +5,8 @@
       "chainId": "5",
       "contracts": {
         "ZKVoting": {
-          "address": "0x5eFedE4750F7F34Dcd0D65A0257A0FDad3De4260",
+          "address": "0xA0CD4feB4d7A3Fa8Ce6619a7201750236727efD7",
           "abi": [
-            {
-              "inputs": [],
-              "stateMutability": "nonpayable",
-              "type": "constructor"
-            },
             {
               "anonymous": false,
               "inputs": [
@@ -119,6 +114,19 @@
               "name": "createProposal",
               "outputs": [],
               "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "getLeaves",
+              "outputs": [
+                {
+                  "internalType": "uint256[]",
+                  "name": "",
+                  "type": "uint256[]"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             },
             {
@@ -419,6 +427,19 @@
               "name": "createProposal",
               "outputs": [],
               "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "getLeaves",
+              "outputs": [
+                {
+                  "internalType": "uint256[]",
+                  "name": "",
+                  "type": "uint256[]"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             },
             {

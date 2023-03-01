@@ -26,7 +26,9 @@ contract ZKVoting {
     mapping(uint256 => uint256) public voteDeadline; // timestamp at which voting for the specified voteId will be closed
     mapping(address => bool) private registeredAddress; // prevent duplicate wallet registration
 
-    constructor() public {}
+    function getLeaves() public view returns (uint256[] memory) {
+        return leafValues;
+    }
 
     function createProposal(
         uint256 deadline,

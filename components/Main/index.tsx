@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAccount, useContractEvent, useContractRead } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import contract from '../../contracts/contractconfig';
 import useSMT from '../../hooks/useSMT';
 import Register from '../Register';
@@ -23,27 +23,22 @@ const Main = () => {
     watch: true,
   });
 
-  useContractEvent({
+  const { data: getLeaves }: any = useContractRead({
     ...contract,
-    eventName: 'AddLeaf',
-    async listener(key: any, value: any) {
-      let temp = leaves;
-      temp[key] = value?.toString();
-
-      setLeaves(temp);
-    },
+    functionName: 'getLeaves',
+    watch: true,
   });
 
-  // useEffect(() => {
-  //   let lfv = {};
-  //   for (let i = addLeafEvents.length - 1; i >= 0; i--) {
-  //     lfv[addLeafEvents[i].args.key] = addLeafEvents[i].args.value.toString();
-  //
-  //   }
-  //   setLeaves(lfv);
-  // }, [addLeafEvents]);
+  useEffect(() => {
+    let obj = {};
+    if (getLeaves && getLeaves.length) {
+      for (let i = 0; i < getLeaves.length; i++) {
+        obj[i] = getLeaves[i].toString();
+      }
 
-  console.log('leaves: ', leaves);
+      setLeaves(obj);
+    }
+  }, [getLeaves]);
 
   const calcedSMT = useSMT(leaves);
 

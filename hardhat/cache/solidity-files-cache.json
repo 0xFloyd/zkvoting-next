@@ -132,7 +132,7 @@
       ]
     },
     "/Users/floyd/Documents/GitHub/TEMPORARY_PROJECTS_AND_LEARNING/zkvoting-next/hardhat/contracts/Verifier.sol": {
-      "lastModificationDate": 1677039742653,
+      "lastModificationDate": 1677620644016,
       "contentHash": "a499172b5b25424ae3b9fad53b37e28d",
       "sourceName": "contracts/Verifier.sol",
       "solcConfig": {
@@ -175,8 +175,8 @@
       ]
     },
     "/Users/floyd/Documents/GitHub/TEMPORARY_PROJECTS_AND_LEARNING/zkvoting-next/hardhat/contracts/ZKVoting.sol": {
-      "lastModificationDate": 1677268230313,
-      "contentHash": "fe8dc9eb664a547493550824b850c4a9",
+      "lastModificationDate": 1677696238614,
+      "contentHash": "1fcea163c024189eb89acf51bebd4a77",
       "sourceName": "contracts/ZKVoting.sol",
       "solcConfig": {
         "version": "0.6.11",
