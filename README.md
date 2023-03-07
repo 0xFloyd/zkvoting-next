@@ -1,13 +1,12 @@
 # ZK Voting
 
-An experiment with zero knowledge proofs
+An experiment with [zero knowledge proofs](https://ethereum.org/en/zero-knowledge-proofs/). Zero-knowledge proofs are mathematical techniques used to prove the authenticity of information without revealing any additional information beyond what is necessary. They are a powerful tool for ensuring privacy and security in applications such as digital identity, blockchain, and cryptography.
 
-This is a simple application showcasing how zero knowledge proofs can allow for secure, secret voting.
-It uses merkle trees to prove that a voter knows a secret in a list, and a secret only they know, and prevents duplicate or fraudelent voting (assuming the voter does not share their secret).
+This application allows registered voters to anonymously vote in any user-created poll. It showcases how zero knowledge proofs can allow for secure, secret voting, which is often desirable in elections to avoid any potential repercussions that might arise from others knowing the outcome of how someone voted. In this application, a user can prove they are a certain registered voter without revealing what their vote is.
 
-It works by adding a hash of the voters secret to the merkle tree, and can prove anonymously the knowledge that a secret exists in the merkle tree without exposing what the secret is.
+Under the hood, the application uses two contracts: a Verifier contract, which is auto generated from a hardhat plugin that compiles circom circuits into solidity (in this case, the `add2Tree` and `proveInTree` circuits are compiled to the `verifyAdd2TreeProof` and `verifyProveInTreeProof` functions, among other helpers), and a ZKVoting contract, which imports the above functions from the Verifier contract.
 
-We use a special kind of merkle tree called a sparse merkle tree (SMT). A sparse Merkle tree is like a standard Merkle tree, except the contained data is indexed, and each datapoint is placed at the leaf that corresponds to that datapoint’s index.
+For the voting process, a special kind of [merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) is used called a sparse merkle tree (SMT). Merkle trees allow the linking of a set of data to a unique hash value. A sparse Merkle tree is like a standard Merkle tree, except the contained data is indexed, and each datapoint is placed at the leaf that corresponds to that datapoint’s index. In this case, when a user registers to vote, their "voter id" (index in the merkle tree) is a hash of their password. In order to prove they're the registered voter they say they are, they use a hash of their password so they don't need to reveal what their password actually is.
 
 <br/>
 
@@ -33,7 +32,7 @@ The `add2Tree.circom` circuit is used to add the voters secret to the merkle tre
 
 # ProveInTree Circuit
 
-This circuit proves we know a secret contained in the merkle tree, without revealing what the secret is. This circuit uses the [iden3 smtverifier](https://github.com/iden3/circomlib/blob/master/circuits/smt/smtverifier.circom) circuit to verify the secret and nullifier (wallet address) are a leaf on our merkle tree.
+This circuit proves we know a secret contained in the merkle tree, without revealing what the secret is. This circuit uses the [iden3 smtverifier](https://github.com/iden3/circomlib/blob/master/circuits/smt/smtverifier.circom) circuit to verify the secret and nullifier (wallet address) are a leaf on our merkle tree. This prevents duplicate or fraudelent voting.
 
 ### Inputs
 
@@ -64,7 +63,12 @@ TODO
 
 <br/>
 
-### Deploy
+# Client
+
+Client is a [NextJS](https://nextjs.org/) app using [wagmi](https://wagmi.sh/) and [Family Connectkit](https://family.co/)
+Styled with [Tailwind](https://tailwindcss.com/)
+
+### Usage
 
 In the `hardhat` folder: <br/>
 
@@ -77,9 +81,14 @@ Goerli:
 Ensure you have pasted your [Alchemy API](https://www.alchemy.com) key and deployer wallet private key in the .env file copying the variables from the .env.example file
 `yarn run deploy --network goerli`
 
-# Client
-
-Client is a [NextJS](https://nextjs.org/) app using [wagmi](https://wagmi.sh/) and [Family Connectkit](https://family.co/)
-Styled with [DaisyUI](https://daisyui.com/) and [Tailwind](https://tailwindcss.com/)
-
 TODO
+
+# Flaws
+
+- When voting, you can see when an adress voted via the on chain transaction. If it's early on in the voting cycle, could possibly correlate voting times with voting.
+- someone may call createVote() with a deadline one second above the current block timestamp, then in the same transaction vote for their own proposal, preventing anybody else from voting on their proposal
+- When an address proves its membership, its anonymity is limited to the secrets held in the tree at the time of proving. The more registered secrets, the better the anonymity will be
+
+# Improvements
+
+Use encryption to secure the data before it is stored in the contract.
