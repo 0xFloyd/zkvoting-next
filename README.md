@@ -5,7 +5,7 @@ An experiment with zero knowledge proofs
 This is a simple application showcasing how zero knowledge proofs can allow for secure, secret voting.
 It uses merkle trees to prove that a voter knows a secret in a list, and a secret only they know, and prevents duplicate or fraudelent voting (assuming the voter does not share their secret).
 
-It works by adding the voters secret to the merkle tree, and can prove anonymously the knowledge that a secret exists in the merkle tree without exposing what the secret is.
+It works by adding a hash of the voters secret to the merkle tree, and can prove anonymously the knowledge that a secret exists in the merkle tree without exposing what the secret is.
 
 We use a special kind of merkle tree called a sparse merkle tree (SMT). A sparse Merkle tree is like a standard Merkle tree, except the contained data is indexed, and each datapoint is placed at the leaf that corresponds to that datapoint’s index.
 
