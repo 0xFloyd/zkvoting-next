@@ -68,7 +68,7 @@ contract ZKVoting {
         emit AddLeaf(input[2], input[3], input[1]);
     }
 
-    function proveLeaf(
+    function proveMembership(
         uint[2] memory a,
         uint[2][2] memory b,
         uint[2] memory c,
