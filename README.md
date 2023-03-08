@@ -1,5 +1,7 @@
 # ZK Voting
 
+![Zk Voting Screenshot](https://raw.githubusercontent.com/0xFloyd/zkvoting-next/main/screenshot.png?token=GHSAT0AAAAAABXTCTOTHRJR5JTTLGUNAU2YZAI4SEQ)
+
 An experiment with [zero knowledge proofs](https://ethereum.org/en/zero-knowledge-proofs/). Zero-knowledge proofs are mathematical techniques used to prove the authenticity of information without revealing any additional information beyond what is necessary. They are a powerful tool for ensuring privacy and security in applications such as digital identity, blockchain, and cryptography.
 
 This application allows registered voters to anonymously vote in any user-created poll. It showcases how zero knowledge proofs can allow for secure, secret voting, which is often desirable in elections to avoid any potential repercussions that might arise from others knowing the outcome of how someone voted. In this application, a user can prove they are a certain registered voter without revealing what their vote is.
