@@ -59,16 +59,19 @@ export default function Home() {
               limit={3}
               transition={Zoom}
             />
-            {contract?.address && (
-              <a
-                href={`https://goerli.etherscan.io/address/${contract.address}`}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs text-secondaryGray absolute bottom-4 right-4 hover:text-PINK hover:cursor-pointer hover:underline"
-              >
-                {contract.address}
-              </a>
-            )}
+            <div className="flex flex-row gap-2 absolute bottom-4 right-4 ">
+              <p className="text-xs text-secondaryGray hover:text-PINK ">built by 0xFloyd for pluto</p>
+              {contract?.address && (
+                <a
+                  href={`https://goerli.etherscan.io/address/${contract.address}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs text-secondaryGray hover:text-PINK hover:cursor-pointer hover:underline"
+                >
+                  {contract.address}
+                </a>
+              )}
+            </div>
           </div>
         </ConnectKitProvider>
       </WagmiConfig>
