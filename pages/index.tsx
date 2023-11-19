@@ -22,6 +22,7 @@ const familyClient = createClient(
     appName: 'zk voting',
     alchemyId,
     chains,
+    walletConnectProjectId: NEXT_PUBLIC_WALLETCONNECT_API,
   })
 );
 
@@ -59,7 +60,7 @@ export default function Home() {
               limit={3}
               transition={Zoom}
             />
-            <div className="flex flex-row gap-2 absolute bottom-4 right-4 ">
+            <div className="flex flex-col items-center md:flex-row gap-1 md:gap-4 -translate-x-1/2 left-1/2 md:left-4 md:translate-x-0 absolute bottom-4 ">
               <p className="text-xs text-secondaryGray hover:text-PINK ">built by 0xFloyd for pluto</p>
               {contract?.address && (
                 <a
