@@ -22,7 +22,6 @@ const familyClient = createClient(
     appName: 'zk voting',
     alchemyId,
     chains,
-    walletConnectProjectId: NEXT_PUBLIC_WALLETCONNECT_API,
   })
 );
 
