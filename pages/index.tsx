@@ -1,29 +1,29 @@
-import Head from 'next/head';
-import { WagmiConfig, createClient, configureChains } from 'wagmi';
-import Header from '@/components/Header';
-import { goerli, hardhat } from 'wagmi/chains';
-import Main from '@/components/Main';
-import { publicProvider } from 'wagmi/providers/public';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { ConnectKitProvider, getDefaultClient } from 'connectkit';
-import { ToastContainer, Zoom } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Stars from '@/components/Stars';
-import contract from '@/contracts/contractconfig';
+import Head from 'next/head'
+import { WagmiConfig, createClient, configureChains } from 'wagmi'
+import Header from '@/components/Header'
+import { goerli, hardhat } from 'wagmi/chains'
+import Main from '@/components/Main'
+import { publicProvider } from 'wagmi/providers/public'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { ConnectKitProvider, getDefaultClient } from 'connectkit'
+import { ToastContainer, Zoom } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+// import Stars from '@/components/Stars';
+import contract from '@/contracts/contractconfig'
 
-const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
+const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
 
-const CHAIN = process.env.NEXT_PUBLIC_NETWORK === 'localhost' ? hardhat : goerli;
+const CHAIN = process.env.NEXT_PUBLIC_NETWORK === 'localhost' ? hardhat : goerli
 
-const { chains } = configureChains([CHAIN], [alchemyProvider({ apiKey: alchemyId }), publicProvider()]);
+const { chains } = configureChains([CHAIN], [alchemyProvider({ apiKey: alchemyId }), publicProvider()])
 
 const familyClient = createClient(
   getDefaultClient({
     appName: 'zk voting',
     alchemyId,
-    chains,
+    chains
   })
-);
+)
 
 export default function Home() {
   return (
@@ -40,12 +40,12 @@ export default function Home() {
             '--ck-connectbutton-background': 'var(--primary)',
             '--ck-connectbutton-hover-background': 'var(--primary)',
             '--ck-connectbutton-active-background': 'var(--primary)',
-            '--ck-font-family': 'Power',
+            '--ck-font-family': 'Power'
           }}
         >
           {/* background-80s */}
           <div className="min-h-screen overflow-x-hidden relative pb-12">
-            <Stars />
+            {/* <Stars /> */}
             <div className="overlay" />
             <Header />
             <Main />
@@ -76,5 +76,5 @@ export default function Home() {
         </ConnectKitProvider>
       </WagmiConfig>
     </>
-  );
+  )
 }
